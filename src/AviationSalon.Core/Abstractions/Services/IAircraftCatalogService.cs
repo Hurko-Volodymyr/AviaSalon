@@ -1,9 +1,4 @@
 ﻿using AviationSalon.Core.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AviationSalon.Core.Abstractions.Services
 {
@@ -11,6 +6,9 @@ namespace AviationSalon.Core.Abstractions.Services
     {
         Task<List<AircraftEntity>> GetAircraftListAsync();
         Task<AircraftEntity> GetAircraftDetailsAsync(int aircraftId);
+        Task EquipAircraftWithWeaponAsync(int aircraftId, int weaponId);
     }
+
+
 
 }

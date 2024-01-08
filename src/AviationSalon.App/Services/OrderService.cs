@@ -1,12 +1,7 @@
-﻿using AviationSalon.Core.Abstractions.Reositories;
+﻿using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Core.Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AviationSalon.App.Services
 {

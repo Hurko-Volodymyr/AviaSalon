@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AviationSalon.Core.Data.Entities
+﻿namespace AviationSalon.Core.Data.Entities
 {
     public class AircraftEntity
     {
@@ -12,6 +6,7 @@ namespace AviationSalon.Core.Data.Entities
         public string Model { get; set; }
         public string Manufacturer { get; set; }
         public int YearOfManufacture { get; set; }
-        public decimal Price { get; set; }
+        public List<WeaponEntity> Weapons { get; set; } = new List<WeaponEntity>();
+        public int MaxWeaponsCapacity { get; set; }
     }
 }
