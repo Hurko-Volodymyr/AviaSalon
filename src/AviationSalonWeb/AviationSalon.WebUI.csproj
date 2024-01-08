@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AviationSalon.App\AviationSalon.App.csproj" />
     <ProjectReference Include="..\AviationSalon.Infrastructure\AviationSalon.Infrastructure.csproj" />
   </ItemGroup>
 
