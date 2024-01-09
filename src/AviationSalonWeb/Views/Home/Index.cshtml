@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <h1 class="display-4 text-center">Welcome to Aviation Shop</h1>
+    <p class="text-center">Explore our collection of aviation products.</p>
+
+    @for (int i = 0; i < 2; i++) 
+    {
+        <div class="row mb-4">
+            @for (int j = 0; j < 4; j++)
+            {
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Product Title</h5>
+                            <p class="card-text">Product Description</p>
+                            <p class="card-text">Product Price</p>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
