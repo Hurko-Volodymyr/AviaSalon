@@ -19,6 +19,10 @@ namespace AviationSalon.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToView("LoginViewName").HasKey(l => l.UserId);
+
             modelBuilder.ApplyConfiguration(new AircraftEntityConfiguration());
             modelBuilder.ApplyConfiguration(new WeaponEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerEntityConfiguration());

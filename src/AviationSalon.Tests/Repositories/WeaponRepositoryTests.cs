@@ -100,7 +100,43 @@ namespace AviationSalon.Tests.Repositories
             var deletedWeapon = await _dbContext.Weapons.FindAsync(weapon.WeaponId);
             deletedWeapon.Should().BeNull();
         }
+
+        [Fact]
+        public async Task GetByIdAsync_ShouldReturnNullForNonExistingWeapon()
+        {
+            // Arrange
+            var weaponRepository = new WeaponRepository(_dbContext);
+
+            // Act
+            var result = await weaponRepository.GetByIdAsync(123);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingWeapon()
+        {
+            // Arrange
+            var weaponRepository = new WeaponRepository(_dbContext);
+            var weapon = new WeaponEntity { WeaponId = 123, Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => weaponRepository.UpdateAsync(weapon));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingWeapon()
+        {
+            // Arrange
+            var weaponRepository = new WeaponRepository(_dbContext);
+            var weapon = new WeaponEntity { WeaponId = 123, Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => weaponRepository.DeleteAsync(weapon));
+        }
     }
+
 
 
 }
