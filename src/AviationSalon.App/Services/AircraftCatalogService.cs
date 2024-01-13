@@ -23,16 +23,32 @@ namespace AviationSalon.App.Services
 
         public async Task<List<AircraftEntity>> GetAircraftListAsync()
         {
-            _logger.LogInformation("Getting the list of aircraft.");
-            var aircraftEntities = await _aircraftRepository.GetAllAsync();
-            return aircraftEntities.ToList();
+            try
+            {
+                _logger.LogInformation("Getting the list of aircraft.");
+                var aircraftEntities = await _aircraftRepository.GetAllAsync();
+                return aircraftEntities.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting the list of aircraft. Details: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<AircraftEntity> GetAircraftDetailsAsync(int aircraftId)
         {
-            _logger.LogInformation($"Getting details for aircraft with ID: {aircraftId}.");
-            var aircraftEntity = await _aircraftRepository.GetByIdAsync(aircraftId);
-            return aircraftEntity;
+            try
+            {
+                _logger.LogInformation($"Getting details for aircraft with ID: {aircraftId}.");
+                var aircraftEntity = await _aircraftRepository.GetByIdAsync(aircraftId);
+                return aircraftEntity;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting details for aircraft. Details: {ex.Message}");
+                throw;
+            }
         }
 
 
@@ -51,7 +67,7 @@ namespace AviationSalon.App.Services
                     return;
                 }
 
-                if (aircraft.Weapons.Count > aircraft.MaxWeaponsCapacity)
+                if (aircraft.Weapons.Count >= aircraft.MaxWeaponsCapacity)
                 {
                     _logger.LogError("The aircraft has reached the maximum number of weapons.");
                     return;
@@ -66,6 +82,7 @@ namespace AviationSalon.App.Services
                 throw;
             }
         }
+
     }
 
 

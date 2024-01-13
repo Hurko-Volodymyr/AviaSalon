@@ -69,7 +69,7 @@ namespace AviationSalon.Tests.Services
         }
 
         [Fact]
-        public async Task GetWeaponsListAsync_ShouldLogErrorAndThrowExceptionOnRepositoryFailure()
+        public async Task GetWeaponsListAsync_ShouldThrowExceptionOnRepositoryFailure()
         {
             // Arrange
             _weaponRepositoryMock.Setup(repo => repo.GetAllAsync()).ThrowsAsync(new Exception("Repository error"));
@@ -79,7 +79,7 @@ namespace AviationSalon.Tests.Services
         }
 
         [Fact]
-        public async Task GetWeaponDetailsAsync_ShouldLogErrorAndThrowExceptionOnRepositoryFailure()
+        public async Task GetWeaponDetailsAsync_ShouldThrowExceptionOnRepositoryFailure()
         {
             // Arrange
             var weaponId = 1;

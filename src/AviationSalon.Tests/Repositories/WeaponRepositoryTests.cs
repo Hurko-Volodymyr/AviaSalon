@@ -18,6 +18,10 @@ namespace AviationSalon.Tests.Repositories
         private readonly DbContextOptions<ApplicationDbContext> _dbContextOptions;
         private readonly ApplicationDbContext _dbContext;
 
+        private WeaponRepository _weaponRepository;
+        private WeaponEntity _existingWeapon;
+        private WeaponEntity _nonExistingWeapon;
+
         public WeaponRepositoryTests()
         {
             _dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -25,6 +29,11 @@ namespace AviationSalon.Tests.Repositories
                 .Options;
 
             _dbContext = new ApplicationDbContext(_dbContextOptions);
+
+            _weaponRepository = new WeaponRepository(_dbContext);
+
+            _existingWeapon = new WeaponEntity { Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+            _nonExistingWeapon = new WeaponEntity { WeaponId = 123, Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
         }
 
         public void Dispose()
@@ -36,11 +45,10 @@ namespace AviationSalon.Tests.Repositories
         public async Task AddAsync_ShouldAddWeaponToDatabase()
         {
             // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-            var weapon = new WeaponEntity { Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+            var weapon = _existingWeapon;
 
             // Act
-            await weaponRepository.AddAsync(weapon);
+            await _weaponRepository.AddAsync(weapon);
 
             // Assert
             var weaponFromDb = await _dbContext.Weapons.FindAsync(weapon.WeaponId);
@@ -52,13 +60,11 @@ namespace AviationSalon.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnCorrectWeapon()
         {
             // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-            var weapon = new WeaponEntity { Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
-            await _dbContext.Weapons.AddAsync(weapon);
+            await _dbContext.Weapons.AddAsync(_existingWeapon);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await weaponRepository.GetByIdAsync(weapon.WeaponId);
+            var result = await _weaponRepository.GetByIdAsync(_existingWeapon.WeaponId);
 
             // Assert
             result.Should().NotBeNull();
@@ -69,17 +75,15 @@ namespace AviationSalon.Tests.Repositories
         public async Task UpdateAsync_ShouldUpdateWeaponInDatabase()
         {
             // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-            var weapon = new WeaponEntity { Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
-            await _dbContext.Weapons.AddAsync(weapon);
+            await _dbContext.Weapons.AddAsync(_existingWeapon);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            weapon.Name = "UpdatedWeapon";
-            await weaponRepository.UpdateAsync(weapon);
+            _existingWeapon.Name = "UpdatedWeapon";
+            await _weaponRepository.UpdateAsync(_existingWeapon);
 
             // Assert
-            var updatedWeapon = await _dbContext.Weapons.FindAsync(weapon.WeaponId);
+            var updatedWeapon = await _dbContext.Weapons.FindAsync(_existingWeapon.WeaponId);
             updatedWeapon.Should().NotBeNull();
             updatedWeapon.Name.Should().Be("UpdatedWeapon");
         }
@@ -88,54 +92,52 @@ namespace AviationSalon.Tests.Repositories
         public async Task DeleteAsync_ShouldDeleteWeaponFromDatabase()
         {
             // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-            var weapon = new WeaponEntity { Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
-            await _dbContext.Weapons.AddAsync(weapon);
+            await _dbContext.Weapons.AddAsync(_existingWeapon);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            await weaponRepository.DeleteAsync(weapon);
+            await _weaponRepository.DeleteAsync(_existingWeapon);
 
             // Assert
-            var deletedWeapon = await _dbContext.Weapons.FindAsync(weapon.WeaponId);
+            var deletedWeapon = await _dbContext.Weapons.FindAsync(_existingWeapon.WeaponId);
             deletedWeapon.Should().BeNull();
         }
 
         [Fact]
         public async Task GetByIdAsync_ShouldReturnNullForNonExistingWeapon()
         {
-            // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-
             // Act
-            var result = await weaponRepository.GetByIdAsync(123);
+            var result = await _weaponRepository.GetByIdAsync(123);
 
             // Assert
             result.Should().BeNull();
         }
 
-        [Fact]
-        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingWeapon()
+        [Theory]
+        [InlineData(123)]
+        [InlineData(456)]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingWeapon(int nonExistingWeaponId)
         {
             // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-            var weapon = new WeaponEntity { WeaponId = 123, Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+            _nonExistingWeapon.WeaponId = nonExistingWeaponId;
 
             // Act & Assert
-            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => weaponRepository.UpdateAsync(weapon));
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _weaponRepository.UpdateAsync(_nonExistingWeapon));
         }
 
-        [Fact]
-        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingWeapon()
+        [Theory]
+        [InlineData(123)]
+        [InlineData(456)]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingWeapon(int nonExistingWeaponId)
         {
             // Arrange
-            var weaponRepository = new WeaponRepository(_dbContext);
-            var weapon = new WeaponEntity { WeaponId = 123, Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+            _nonExistingWeapon.WeaponId = nonExistingWeaponId;
 
             // Act & Assert
-            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => weaponRepository.DeleteAsync(weapon));
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _weaponRepository.DeleteAsync(_nonExistingWeapon));
         }
     }
+
 
 
 
