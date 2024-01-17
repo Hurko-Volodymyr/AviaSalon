@@ -4,7 +4,6 @@ using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Infrastructure;
 using AviationSalon.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
