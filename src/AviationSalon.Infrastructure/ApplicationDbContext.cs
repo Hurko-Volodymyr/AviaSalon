@@ -32,9 +32,6 @@ namespace AviationSalon.Infrastructure
             modelBuilder.ApplyConfiguration(new OrderEntityConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemEntityConfiguration());
 
-
-
-
         }
     }
 
