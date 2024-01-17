@@ -25,7 +25,7 @@ jobs:
       run: dotnet build src/AviationSalonWeb/AviationSalon.WebUI.csproj --configuration Release
 
     - name: Test
-      run: dotnet test src/AviationSalonWeb.Tests/AviationSalonWeb.Tests.csproj --configuration Release
+      run: dotnet test src/AviationSalon.Tests/AviationSalon.Tests.csproj --configuration Release
 
     - name: Publish artifact
       uses: actions/upload-artifact@v2
