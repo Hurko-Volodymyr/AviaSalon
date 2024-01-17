@@ -1,3 +1,4 @@
+
 name: CI
 
 on:
@@ -19,10 +20,16 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src/AviationSalonWeb/AviationSalon.WebUI.csproj
 
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build src/AviationSalonWeb/AviationSalon.WebUI.csproj --configuration Release
 
-    - name: Run tests
-      run: dotnet test --configuration Release
+    - name: Test
+      run: dotnet test src/AviationSalon.Tests/AviationSalon.Tests.csproj --configuration Release
+
+    - name: Publish artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: publish
+        path: src/AviationSalonWeb/bin/Release/net8.0/publish

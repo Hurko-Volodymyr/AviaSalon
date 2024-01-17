@@ -12,6 +12,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy  
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"  
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
 
   postgres:
     image: postgres:latest
@@ -20,7 +23,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
