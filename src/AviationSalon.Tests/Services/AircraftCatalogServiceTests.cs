@@ -207,6 +207,47 @@ namespace AviationSalon.Tests.Services
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _aircraftService.EquipAircraftWithWeaponAsync(_aircraftEntity.AircraftId, _weapon.WeaponId));
         }
+
+        [Fact]
+        public async Task ClearLoadedWeaponsAsync_ShouldClearWeaponsForAircraft()
+        {
+            // Arrange
+            _aircraftRepositoryMock.Setup(repo => repo.GetByIdAsync(_aircraftEntity.AircraftId)).ReturnsAsync(_aircraftEntity);
+            _weaponRepositoryMock.Setup(repo => repo.GetByIdAsync(_weapon.WeaponId)).ReturnsAsync(_weapon);
+            _weaponRepositoryMock.Setup(repo => repo.GetByIdAsync(_secondWeapon.WeaponId)).ReturnsAsync(_secondWeapon);
+            await _aircraftService.EquipAircraftWithWeaponAsync(_aircraftEntity.AircraftId, _weapon.WeaponId);
+            await _aircraftService.EquipAircraftWithWeaponAsync(_aircraftEntity.AircraftId, _secondWeapon.WeaponId);
+
+            // Act
+            await _aircraftService.ClearLoadedWeaponsAsync(_aircraftEntity.AircraftId);
+
+            // Assert
+            _aircraftEntity.Weapons.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task ClearLoadedWeaponsAsync_ShouldNotClearWeaponsForNonexistentAircraft()
+        {
+            // Arrange
+            _aircraftRepositoryMock.Setup(repo => repo.GetByIdAsync(_aircraftEntity.AircraftId)).ReturnsAsync((AircraftEntity)null);
+
+            // Act
+            await _aircraftService.ClearLoadedWeaponsAsync(_aircraftEntity.AircraftId);
+
+            // Assert
+            _aircraftRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<AircraftEntity>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task ClearLoadedWeaponsAsync_ShouldErrorOnException()
+        {
+            // Arrange
+            _aircraftRepositoryMock.Setup(repo => repo.GetByIdAsync(_aircraftEntity.AircraftId)).ThrowsAsync(new Exception("Repository error"));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => _aircraftService.ClearLoadedWeaponsAsync(_aircraftEntity.AircraftId));
+        }
+
     }
 
 }

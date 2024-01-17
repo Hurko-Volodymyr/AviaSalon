@@ -14,8 +14,11 @@ namespace AviationSalon.Infrastructure
         {
         }
 
-         public DbSet<AircraftEntity> Aircrafts { get; set; }
+        public DbSet<AircraftEntity> Aircrafts { get; set; }
         public DbSet<WeaponEntity> Weapons { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

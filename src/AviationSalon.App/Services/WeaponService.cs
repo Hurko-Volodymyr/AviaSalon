@@ -42,7 +42,6 @@ namespace AviationSalon.App.Services
                 _logger.LogError($"Error getting details for weapon. Details: {ex.Message}");
                 throw;
             }
-        }
+        }       
     }
-
 }

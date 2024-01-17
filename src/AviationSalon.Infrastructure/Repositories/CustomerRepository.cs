@@ -1,5 +1,6 @@
 ﻿using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,38 @@ namespace AviationSalon.Infrastructure.Repositories
 {
     public class CustomerRepository : IRepository<CustomerEntity>
     {
-        public Task AddAsync(CustomerEntity entity)
+        private readonly ApplicationDbContext _dbContext;
+
+        public CustomerRepository(ApplicationDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext ?? throw new();
+        }
+        public async Task AddAsync(CustomerEntity entity)
+        {
+            _dbContext.Customers.Add(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(CustomerEntity entity)
+        public async Task DeleteAsync(CustomerEntity entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Customers.Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<List<CustomerEntity>> GetAllAsync()
+        public async Task<List<CustomerEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Customers.ToListAsync();
         }
 
-        public Task<CustomerEntity> GetByIdAsync(int id)
+        public async Task<CustomerEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Customers.FindAsync(id);
         }
 
-        public Task UpdateAsync(CustomerEntity entity)
+        public async Task UpdateAsync(CustomerEntity entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -83,6 +83,33 @@ namespace AviationSalon.App.Services
             }
         }
 
+
+        public async Task ClearLoadedWeaponsAsync(int aircraftId)
+        {
+            try
+            {
+                _logger.LogInformation($"Clearing loaded weapons for aircraft with ID {aircraftId}.");
+
+                var aircraft = await _aircraftRepository.GetByIdAsync(aircraftId);
+
+                if (aircraft == null)
+                {
+                    _logger.LogError($"Aircraft with ID {aircraftId} not found.");
+                    return;
+                }
+
+                aircraft.Weapons.Clear();
+                await _aircraftRepository.UpdateAsync(aircraft);
+
+                _logger.LogInformation($"Cleared loaded weapons for aircraft with ID {aircraftId}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error clearing loaded weapons. Details: {ex.Message}");
+                throw;
+            }
+        }
+
     }
 
 

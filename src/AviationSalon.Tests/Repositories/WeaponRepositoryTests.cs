@@ -44,16 +44,13 @@ namespace AviationSalon.Tests.Repositories
         [Fact]
         public async Task AddAsync_ShouldAddWeaponToDatabase()
         {
-            // Arrange
-            var weapon = _existingWeapon;
-
-            // Act
-            await _weaponRepository.AddAsync(weapon);
+            // Arrange & Act
+            await _weaponRepository.AddAsync(_existingWeapon);
 
             // Assert
-            var weaponFromDb = await _dbContext.Weapons.FindAsync(weapon.WeaponId);
+            var weaponFromDb = await _dbContext.Weapons.FindAsync(_existingWeapon.WeaponId);
             weaponFromDb.Should().NotBeNull();
-            weaponFromDb.Name.Should().Be("TestWeapon");
+            weaponFromDb.Name.Should().Be(_existingWeapon.Name);
         }
 
         [Fact]
@@ -137,8 +134,4 @@ namespace AviationSalon.Tests.Repositories
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _weaponRepository.DeleteAsync(_nonExistingWeapon));
         }
     }
-
-
-
-
 }

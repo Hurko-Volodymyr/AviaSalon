@@ -1,5 +1,6 @@
 ﻿using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,38 @@ namespace AviationSalon.Infrastructure.Repositories
 {
     public class OrderItemRepository : IRepository<OrderItemEntity>
     {
-        public Task AddAsync(OrderItemEntity entity)
+        private readonly ApplicationDbContext _dbContext;
+
+        public OrderItemRepository(ApplicationDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext ?? throw new();
+        }
+        public async Task AddAsync(OrderItemEntity entity)
+        {
+            _dbContext.OrderItems.Add(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(OrderItemEntity entity)
+        public async Task DeleteAsync(OrderItemEntity entity)
         {
-            throw new NotImplementedException();
+            _dbContext.OrderItems.Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<List<OrderItemEntity>> GetAllAsync()
+        public async Task<List<OrderItemEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.OrderItems.ToListAsync();
         }
 
-        public Task<OrderItemEntity> GetByIdAsync(int id)
+        public async Task<OrderItemEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.OrderItems.FindAsync(id);
         }
 
-        public Task UpdateAsync(OrderItemEntity entity)
+        public async Task UpdateAsync(OrderItemEntity entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
