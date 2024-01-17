@@ -19,13 +19,13 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore AviationSalonWeb/AviationSalon.WebUI.csproj
+      run: dotnet restore src/AviationSalonWeb/AviationSalon.WebUI.csproj
 
     - name: Build
-      run: dotnet build AviationSalonWeb/AviationSalon.WebUI.csproj --configuration Release
+      run: dotnet build src/AviationSalonWeb/AviationSalon.WebUI.csproj --configuration Release
 
     - name: Test
-      run: dotnet test AviationSalonWeb/AviationSalon.WebUI.csproj --no-build
+      run: dotnet test src/AviationSalonWeb.Tests/AviationSalonWeb.Tests.csproj --configuration Release
 
     - name: Publish artifact
       uses: actions/upload-artifact@v2
