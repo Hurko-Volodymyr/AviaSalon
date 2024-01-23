@@ -1,12 +1,11 @@
-﻿using AviationSalon.Core.Data.Entities;
-using AviationSalon.Core.Data.Entities.EntityConfigurations;
-using Microsoft.AspNetCore.Identity;
+﻿using AviationSalon.Core.Data.Entities.EntityConfigurations;
+using AviationSalon.Core.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace AviationSalon.Infrastructure
 {
-
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -24,15 +23,11 @@ namespace AviationSalon.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<IdentityUserLogin<string>>().ToView("LoginViewName").HasKey(l => l.UserId);
-
             modelBuilder.ApplyConfiguration(new AircraftEntityConfiguration());
             modelBuilder.ApplyConfiguration(new WeaponEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerEntityConfiguration());
             modelBuilder.ApplyConfiguration(new OrderEntityConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemEntityConfiguration());
-
         }
     }
-
 }

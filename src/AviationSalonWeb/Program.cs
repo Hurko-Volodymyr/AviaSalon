@@ -3,9 +3,15 @@ using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Infrastructure;
+using AviationSalon.Infrastructure.Identity;
 using AviationSalon.Infrastructure.Repositories;
+using IdentityServer4.AspNetIdentity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Globalization;
 
 namespace AviationSalonWeb
@@ -17,11 +23,19 @@ namespace AviationSalonWeb
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddIdentityServer()
+                .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
+                .AddInMemoryApiResources(IdentityServerConfig.ApiResources)
+                .AddInMemoryClients(IdentityServerConfig.Clients)
+                .AddAspNetIdentity<IdentityUser>();
 
             builder.Services.AddScoped<IRepository<OrderEntity>, OrderRepository>();
             builder.Services.AddScoped<IRepository<OrderItemEntity>, OrderItemRepository>();
@@ -30,21 +44,16 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<IRepository<WeaponEntity>, WeaponRepository>();
 
             builder.Services.AddScoped<IOrderService, OrderService>();
-            //builder.Services.AddScoped<IOrderItemService, OrderItemService>();
             builder.Services.AddScoped<IAircraftCatalogService, AircraftCatalogService>();
             builder.Services.AddScoped<IWeaponService, WeaponService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
 
-
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddRazorPages();
-            var supportedCultures = new[] 
+            var supportedCultures = new[]
             {
                 new CultureInfo("en"),
                 new CultureInfo("ua")
@@ -76,7 +85,7 @@ namespace AviationSalonWeb
 
             app.UseRouting();
 
-           // app.UseAuthorization();
+            // app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

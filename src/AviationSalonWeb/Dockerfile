@@ -17,9 +17,10 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./AviationSalon.WebUI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+RUN dotnet tool install --global dotnet-ef --version 8.0.0
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-CMD ["dotnet", "AviationSalon.WebUI.dll"]
-ENTRYPOINT ["sh", "-c", "sleep 10s && dotnet ef database update && dotnet AviationSalon.WebUI.dll"]
+CMD ["dotnet", "AviationSalon.WebUI.dll", "migrate"]
