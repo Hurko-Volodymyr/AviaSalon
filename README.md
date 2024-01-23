@@ -1,7 +1,5 @@
 # AviaSalon
- This is my view on the AviaStore
-
-# Aviation Salon Web
+ This is my view on the AviaStore. Tris project is about request close air support. 
 
 Welcome to the Aviation Salon, your premier platform for purchasing military aircraft, spare parts, fuel, and related accessories.
 
@@ -13,7 +11,7 @@ Welcome to the Aviation Salon, your premier platform for purchasing military air
 
 - **Aircraft Marketplace:**
   - Browse a diverse selection of military aircraft.
-  - View detailed specifications, images, and pricing.
+  - View detailed specifications, images, and equipment.
 
 - **Spare Parts Store:**
   - Find and purchase genuine spare parts for various aircraft models.
@@ -22,7 +20,7 @@ Welcome to the Aviation Salon, your premier platform for purchasing military air
   - Place orders for high-quality aviation fuel and propellants.
 
 - **BKC (Bombs, Missiles, and Cartridges) Store:**
-  - Explore and buy a range of military-grade weaponry.
+  - Explore and choose a range of military-grade weaponry.
 
 - **Order Management:**
   - Track and manage your orders seamlessly.

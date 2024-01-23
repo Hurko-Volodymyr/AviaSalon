@@ -1,0 +1,31 @@
+﻿version: '3.8'
+
+services:
+  web:
+    image: aviation.app
+    build:
+      context: .
+      dockerfile: AviationSalonWeb/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy  
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"  
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+
+  postgres:
+    image: postgres:latest
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "AviationSalon"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: AviationSalon
+    ports:
+      - "5432:5432"

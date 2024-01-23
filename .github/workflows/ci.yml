@@ -1,0 +1,35 @@
+
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore src/AviationSalonWeb/AviationSalon.WebUI.csproj
+
+    - name: Build
+      run: dotnet build src/AviationSalonWeb/AviationSalon.WebUI.csproj --configuration Release
+
+    - name: Test
+      run: dotnet test src/AviationSalon.Tests/AviationSalon.Tests.csproj --configuration Release
+
+    - name: Publish artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: publish
+        path: src/AviationSalonWeb/bin/Release/net8.0/publish
