@@ -1,4 +1,5 @@
 using AviationSalon.App.Services;
+using AviationSalon.Core.Abstractions;
 using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
@@ -42,6 +43,7 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<IRepository<CustomerEntity>, CustomerRepository>();
             builder.Services.AddScoped<IRepository<AircraftEntity>, AircraftRepository>();
             builder.Services.AddScoped<IRepository<WeaponEntity>, WeaponRepository>();
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IAircraftCatalogService, AircraftCatalogService>();
@@ -60,6 +62,13 @@ namespace AviationSalonWeb
             };
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var dbInitializer = services.GetRequiredService<IDbInitializer>();
+                dbInitializer.Initialize();
+            }
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {

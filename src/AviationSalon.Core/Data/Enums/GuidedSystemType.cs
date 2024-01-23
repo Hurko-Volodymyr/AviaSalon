@@ -3,6 +3,8 @@
     public enum GuidedSystemType
     {
         Infrared,
-        Radar,
+        Laser,
+        ActiveRadar,
+        PassiveRadar,
     }
 }
