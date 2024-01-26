@@ -20,8 +20,9 @@ namespace AviationSalon.App.Services
         {
             try
             {
-                _logger.LogInformation("Getting the list of weapons.");
-                return await _weaponRepository.GetAllAsync();
+                var weapons = await _weaponRepository.GetAllAsync();
+                _logger.LogInformation($"Getting the list of weapons with count: {weapons.Count()}.");
+                return weapons;
             }
             catch (Exception ex)
             {

@@ -24,10 +24,10 @@ namespace AviationSalon.App.Services
         public async Task<List<AircraftEntity>> GetAircraftListAsync()
         {
             try
-            {
-                _logger.LogInformation("Getting the list of aircraft.");
+            {               
                 var aircraftEntities = await _aircraftRepository.GetAllAsync();
-                return aircraftEntities.ToList();
+                _logger.LogInformation($"Getting the list of aircrafts with count:{aircraftEntities.Count()}.");
+                return aircraftEntities;
             }
             catch (Exception ex)
             {

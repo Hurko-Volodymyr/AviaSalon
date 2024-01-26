@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Globalization;
 
@@ -19,7 +20,7 @@ namespace AviationSalonWeb
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -43,7 +44,7 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<IRepository<CustomerEntity>, CustomerRepository>();
             builder.Services.AddScoped<IRepository<AircraftEntity>, AircraftRepository>();
             builder.Services.AddScoped<IRepository<WeaponEntity>, WeaponRepository>();
-            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+            builder.Services.AddScoped<DataSeeder>();
 
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IAircraftCatalogService, AircraftCatalogService>();
@@ -62,13 +63,16 @@ namespace AviationSalonWeb
                 new CultureInfo("ua")
             };
 
+
             var app = builder.Build();
+
 
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var dbInitializer = services.GetRequiredService<IDbInitializer>();
-                dbInitializer.InitializeAsync();
+
+                var dataSeeder = services.GetRequiredService<DataSeeder>();
+                await dataSeeder.SeedDataAsync();
             }
 
             app.UseRequestLocalization(new RequestLocalizationOptions

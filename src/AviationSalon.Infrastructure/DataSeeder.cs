@@ -1,10 +1,6 @@
-﻿using AviationSalon.Core.Abstractions;
-using AviationSalon.Core.Abstractions.Repositories;
-using AviationSalon.Core.Data.Entities;
+﻿using AviationSalon.Core.Data.Entities;
 using AviationSalon.Core.Data.Enums;
-using AviationSalon.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,50 +10,40 @@ using System.Threading.Tasks;
 
 namespace AviationSalon.Infrastructure
 {
-    public class DbInitializer : IDbInitializer
+    public class DataSeeder
     {
         private readonly ApplicationDbContext _context;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<DbInitializer> _logger;
+        private readonly ILogger<DataSeeder> _logger;
 
-        public DbInitializer(ApplicationDbContext context, IServiceProvider serviceProvider, ILogger<DbInitializer> logger)
+        public DataSeeder(ApplicationDbContext context, ILogger<DataSeeder> logger)
         {
             _context = context;
-            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
-
-        public async Task InitializeAsync()
+        public async Task SeedDataAsync()
         {
-            _logger.LogInformation("Initializing the database...");
+            _logger.LogInformation("Seeding data...");
 
             await _context.Database.MigrateAsync();
 
-            _logger.LogInformation("Database migration completed.");
+            _logger.LogInformation("Removing existing weapons...");
+            _context.Weapons.RemoveRange(_context.Weapons);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Existing weapons removed.");
 
-            var seedWeaponDataTask = SeedWeaponDataAsync();
-            var seedAircraftDataTask = SeedAircraftDataAsync();
+            _logger.LogInformation("Removing existing aircrafts...");
+            _context.Aircrafts.RemoveRange(_context.Aircrafts);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Existing aircrafts removed.");
 
-            await Task.WhenAll(seedWeaponDataTask, seedAircraftDataTask);
-
-            _logger.LogInformation("Database seeding completed.");
-        }
-
-        private async Task SeedWeaponDataAsync()
-        {
-            _logger.LogInformation("-------------------SeedWeaponDataAsync HERE-------------------");
-
-            var weaponsExist = _context.Weapons.Any();
-            _logger.LogInformation($"Check for existing weapons: {weaponsExist}");
             if (!_context.Weapons.Any())
             {
-                    try
-                    {
-                        var weaponRepository = _serviceProvider.GetRequiredService<IRepository<WeaponEntity>>();
-                        var weapons = new List<WeaponEntity>
-                        {
-                            new WeaponEntity
+                _logger.LogInformation("Seeding weapons...");
+
+                var weapons = new List<WeaponEntity>
+                {
+                    new WeaponEntity
                             {
                                 Name = "AIM-120 AMRAAM",
                                 Type = WeaponType.AirToAir,
@@ -79,7 +65,7 @@ namespace AviationSalon.Infrastructure
                                 Type = WeaponType.AirToAir,
                                 GuidedSystem = GuidedSystemType.ActiveRadar,
                                 Range = 190000,
-                                FirePower = 120,    
+                                FirePower = 120,
                             },
                             new WeaponEntity
                             {
@@ -105,39 +91,25 @@ namespace AviationSalon.Infrastructure
                                 Range = 12000,
                                 FirePower = 250,
                             },
-                        };
+                };
 
-                        foreach (var weapon in weapons)
-                        {
-                            await weaponRepository.AddAsync(weapon);
-                            _logger.LogInformation(weapon.Name);
-                        }
+                _context.Weapons.AddRange(weapons);
+                await _context.SaveChangesAsync();
 
-                        await _context.SaveChangesAsync();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning($"Error in SeedWeaponDataAsync: {ex.Message}");
-                        throw;
-                    };                
+                _logger.LogInformation($"Seeded {weapons.Count} weapons.");
             }
-            else 
+            else
             {
-                _logger.LogInformation("No weapon was added");
-            }
-        }
-        private async Task SeedAircraftDataAsync()
-        {
-            _logger.LogInformation("-------------------SeedAircraftDataAsync HERE-------------------");
+                _logger.LogInformation("Weapons already seeded.");
+            }            
+
             if (!_context.Aircrafts.Any())
             {
-                    try
-                    {
-                        var aircraftRepository = _serviceProvider.GetRequiredService<IRepository<AircraftEntity>>();
-                        var aircrafts = new List<AircraftEntity>
-                        {
-                            new AircraftEntity
+                _logger.LogInformation("Seeding aircrafts...");
+
+                var aircrafts = new List<AircraftEntity>
+                {
+                    new AircraftEntity
                             {
                                 Model = "MiG-29",
                                 Range = 1430000,
@@ -182,24 +154,19 @@ namespace AviationSalon.Infrastructure
                                 MaxWeaponsCapacity = 8,
                                  ImageFileName = "aircrafts/f-16.jpg"
                             },
-                        };                  
+                };
 
+                _context.Aircrafts.AddRange(aircrafts);
+                await _context.SaveChangesAsync();
 
-                        foreach (var aircraft in aircrafts)
-                        {
-                            await aircraftRepository.AddAsync(aircraft);
-                            _logger.LogInformation(aircraft.Model);
-                        }
-
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-               
+                _logger.LogInformation($"Seeded {aircrafts.Count} aircrafts.");
             }
+            else
+            {
+                _logger.LogInformation("Aircrafts already seeded.");
+            }
+
+            _logger.LogInformation("Data seeding completed.");
         }
     }
-
 }
