@@ -1,0 +1,25 @@
+﻿@using AviationSalon.Core.Data.Entities
+@model List<AircraftEntity>
+
+<div class="container">
+    <h1 class="display-4 text-center">Aircraft Catalog</h1>
+
+    <div class="row mb-4">
+        @foreach (var aircraft in ViewData["AircraftList"] as List<AircraftEntity>)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="~/images/@aircraft.ImageFileName" class="card-img-top" alt="Aircraft Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@aircraft.Model</h5>
+                        <p class="card-text">Range: @aircraft.Range</p>
+                        <p class="card-text">Max Height: @aircraft.MaxHeight</p>
+                        <p class="card-text">Max Weapons Capacity: @aircraft.MaxWeaponsCapacity</p>
+
+                        <a href="#" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

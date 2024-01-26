@@ -5,6 +5,8 @@ using System.Diagnostics;
 
 namespace AviationSalonWeb.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,6 +20,8 @@ namespace AviationSalonWeb.Controllers
             _weaponService = weaponCatalogService;
         }
 
+        [HttpGet]
+        [Route("index")]
         public async Task<IActionResult> Index()
         {
             var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
@@ -28,15 +32,42 @@ namespace AviationSalonWeb.Controllers
             return View();
         }
 
+
+
+        [HttpGet]
+        [Route("aircrafts")]
+        public async Task<IActionResult> Aircrafts()
+        {
+            var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
+            ViewData["AircraftList"] = aircraftList;
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("weapons")] 
+        public async Task<IActionResult> Weapons()
+        {
+            var weaponsList = await _weaponService.GetWeaponsListAsync();
+            ViewData["WeaponsList"] = weaponsList;
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("privacy")]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [HttpGet]
+        [Route("error")] 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
 }

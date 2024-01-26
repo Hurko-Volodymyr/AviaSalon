@@ -1,0 +1,23 @@
+﻿@using AviationSalon.Core.Data.Entities
+@model List<WeaponEntity>
+
+<div class="container">
+    <h1 class="display-4 text-center">Weapons Catalog</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">All Weapons</h5>
+                    <ul>
+                        @foreach (var weapon in ViewData["WeaponList"] as List<WeaponEntity>)
+                                    
+                        {
+                            <li>@weapon.Name - Type: @weapon.Type, Range: @weapon.Range, Fire Power: @weapon.FirePower</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
