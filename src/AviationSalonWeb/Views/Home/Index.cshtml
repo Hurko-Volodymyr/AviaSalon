@@ -1,4 +1,5 @@
-﻿@{
+﻿@using AviationSalon.Core.Data.Entities
+@{
     ViewData["Title"] = "Home Page";
 }
 @model List<AircraftEntity>
@@ -8,24 +9,37 @@
     <p class="text-center">Explore our collection of aviation products.</p>
 
     <div class="row mb-4">
-        @foreach (var aircraft in Model)
+        <!-- Display Aircraft -->
+        @foreach (var aircraft in (List<AircraftEntity>)ViewData["AircraftList"])
         {
             <div class="col-md-3">
                 <div class="card">
-                    <!--  URL  -->
-                    <img src="@aircraft.ImageUrl" class="card-img-top" alt="Aircraft Image">
-
+                    <img src="~/images/@aircraft.ImageFileName" class="card-img-top" alt="Aircraft Image">
                     <div class="card-body">
                         <h5 class="card-title">@aircraft.Model</h5>
                         <p class="card-text">Range: @aircraft.Range</p>
                         <p class="card-text">Max Height: @aircraft.MaxHeight</p>
-                        <p class="card-text">Max Height: @aircraft.MaxWeaponCapacity</p>
-                        
+                        <p class="card-text">Max Weapons Capacity: @aircraft.MaxWeaponsCapacity</p>
+
                         <a href="#" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
         }
+
+        <!-- Display Weapons -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">All Weapons</h5>
+                    <ul>
+                        @foreach (var weapon in (List<WeaponEntity>)ViewData["WeaponsList"])
+                        {
+                            <li>@weapon.Name - Type: @weapon.Type, Range: @weapon.Range, Fire Power: @weapon.FirePower</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-

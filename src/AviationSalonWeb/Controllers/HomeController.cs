@@ -9,18 +9,23 @@ namespace AviationSalonWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAircraftCatalogService _aircraftCatalogService;
+        private readonly IWeaponService _weaponService;
 
-        public HomeController(ILogger<HomeController> logger, IAircraftCatalogService aircraftCatalogService)
+        public HomeController(ILogger<HomeController> logger, IAircraftCatalogService aircraftCatalogService, IWeaponService weaponCatalogService)
         {
             _logger = logger;
             _aircraftCatalogService = aircraftCatalogService;
+            _weaponService = weaponCatalogService;
         }
 
         public async Task<IActionResult> Index()
         {
             var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
+            var weaponsList = await _weaponService.GetWeaponsListAsync();
+            ViewData["AircraftList"] = aircraftList;
+            ViewData["WeaponsList"] = weaponsList;
 
-            return View(aircraftList);
+            return View();
         }
 
         public IActionResult Privacy()

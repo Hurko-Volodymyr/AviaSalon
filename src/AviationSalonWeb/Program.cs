@@ -51,6 +51,7 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<ICustomerService, CustomerService>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddLogging();
 
             builder.Services.AddControllersWithViews();
 
