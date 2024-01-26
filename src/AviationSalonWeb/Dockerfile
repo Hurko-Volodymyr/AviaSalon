@@ -3,10 +3,10 @@ WORKDIR /src
 
 COPY . .
 
-RUN dotnet build AviationSalon.sln -c Release -o /app/build
+RUN dotnet build AviationSalonWeb.sln -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish AviationSalon.sln -c Release -o /app/publish
+RUN dotnet publish AviationSalonWeb.sln -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app

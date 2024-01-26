@@ -67,7 +67,7 @@ namespace AviationSalonWeb
             {
                 var services = scope.ServiceProvider;
                 var dbInitializer = services.GetRequiredService<IDbInitializer>();
-                dbInitializer.Initialize();
+                dbInitializer.InitializeAsync();
             }
 
             app.UseRequestLocalization(new RequestLocalizationOptions

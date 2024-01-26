@@ -1,3 +1,4 @@
+using AviationSalon.Core.Abstractions.Services;
 using AviationSalonWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,15 +8,19 @@ namespace AviationSalonWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAircraftCatalogService _aircraftCatalogService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IAircraftCatalogService aircraftCatalogService)
         {
             _logger = logger;
+            _aircraftCatalogService = aircraftCatalogService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
+
+            return View(aircraftList);
         }
 
         public IActionResult Privacy()

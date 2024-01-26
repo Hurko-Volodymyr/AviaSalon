@@ -3,6 +3,7 @@ using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Core.Data.Enums;
 using AviationSalon.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,13 @@ namespace AviationSalon.Infrastructure
             _serviceProvider = serviceProvider;
         }
 
-        public void Initialize()
+        public async Task InitializeAsync()
         {
-            _context.Database.EnsureCreated();
+            await _context.Database.MigrateAsync();
 
-            SeedWeaponDataAsync().Wait();
+            await SeedWeaponDataAsync();
+            await SeedAircraftDataAsync();
         }
-
         private async Task SeedWeaponDataAsync()
         {
             if (!_context.Weapons.Any())
@@ -94,10 +95,81 @@ namespace AviationSalon.Infrastructure
 
                         foreach (var weapon in weapons)
                         {
-                            weaponRepository.AddAsync(weapon).Wait();
+                            await weaponRepository.AddAsync(weapon);
                         }
 
+                        await _context.SaveChangesAsync();
 
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        private async Task SeedAircraftDataAsync()
+        {
+            if (!_context.Aircrafts.Any())
+            {
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    try
+                    {
+                        var aircraftRepository = scopedServices.GetRequiredService<IRepository<AircraftEntity>>();
+                        var aircrafts = new List<AircraftEntity>
+                        {
+                            new AircraftEntity
+                            {
+                                Model = "MiG-29",
+                                Range = 1430000,
+                                MaxHeight = 18013,
+                                Role = Role.Fighter,
+                                MaxWeaponsCapacity = 6,
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "Su-27",
+                                Range = 3300000,
+                                MaxHeight = 20000,
+                                Role = Role.Fighter,
+                                MaxWeaponsCapacity = 8,
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "Su-24",
+                                Range = 1850000,
+                                MaxHeight = 11000,
+                                Role = Role.Bomber,
+                                MaxWeaponsCapacity = 12,
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "Su-25",
+                                Range = 750000,
+                                MaxHeight = 5000,
+                                Role = Role.CloseAirSupport,
+                                MaxWeaponsCapacity = 10,
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "F-16",
+                                Range = 4220000,
+                                MaxHeight = 15240,
+                                Role = Role.Multirole,
+                                MaxWeaponsCapacity = 8,
+                            },
+                        };                  
+
+
+                        foreach (var aircraft in aircrafts)
+                        {
+                            await aircraftRepository.AddAsync(aircraft);
+                        }
+
+                        await _context.SaveChangesAsync();
                     }
                     catch (Exception)
                     {

@@ -30,16 +30,16 @@ namespace AviationSalon.Tests.Repositories
         private AircraftEntity _aircraft { get; set; } = new AircraftEntity
         {
             Model = "TestModel",
-            Manufacturer = "TestManufacturer",
-            YearOfManufacture = 2022
+            Role = Core.Data.Enums.Role.Fighter,
+            Range = 10,
+            MaxHeight = 100,
+            MaxWeaponsCapacity = 2,            
         };
 
         private AircraftEntity _nonExistingAircraft { get; set; } = new AircraftEntity
         {
-            AircraftId = 123,
+            AircraftId = -123,
             Model = "NonExistingAircraft",
-            Manufacturer = "TestManufacturer",
-            YearOfManufacture = 2022
         };
 
         [Fact]

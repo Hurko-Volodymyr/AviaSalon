@@ -9,6 +9,6 @@ namespace AviationSalon.Core.Abstractions
 {
     public interface IDbInitializer
     {
-        void Initialize();
+        Task InitializeAsync();
     }   
 }
