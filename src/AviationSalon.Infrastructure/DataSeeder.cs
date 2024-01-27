@@ -27,15 +27,78 @@ namespace AviationSalon.Infrastructure
 
             await _context.Database.MigrateAsync();
 
-            _logger.LogInformation("Removing existing weapons...");
-            _context.Weapons.RemoveRange(_context.Weapons);
-            await _context.SaveChangesAsync();
-            _logger.LogInformation("Existing weapons removed.");
-
             _logger.LogInformation("Removing existing aircrafts...");
             _context.Aircrafts.RemoveRange(_context.Aircrafts);
             await _context.SaveChangesAsync();
             _logger.LogInformation("Existing aircrafts removed.");
+
+            if (!_context.Aircrafts.Any())
+            {
+                _logger.LogInformation("Seeding aircrafts...");
+
+                var aircrafts = new List<AircraftEntity>
+                {
+                    new AircraftEntity
+                            {
+                                Model = "MiG-29",
+                                Range = 1430000,
+                                MaxHeight = 18013,
+                                Role = Role.Fighter,
+                                MaxWeaponsCapacity = 6,
+                                 ImageFileName = "aircrafts/mig-29.jpg"
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "Su-27",
+                                Range = 3300000,
+                                MaxHeight = 20000,
+                                Role = Role.Fighter,
+                                MaxWeaponsCapacity = 8,
+                                 ImageFileName = "aircrafts/su-27.jpg"
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "Su-24",
+                                Range = 1850000,
+                                MaxHeight = 11000,
+                                Role = Role.Bomber,
+                                MaxWeaponsCapacity = 12,
+                                 ImageFileName = "aircrafts/su-24.jpg"
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "Su-25",
+                                Range = 750000,
+                                MaxHeight = 5000,
+                                Role = Role.CloseAirSupport,
+                                MaxWeaponsCapacity = 10,
+                                 ImageFileName = "aircrafts/su-25.jpg"
+                            },
+                            new AircraftEntity
+                            {
+                                Model = "F-16",
+                                Range = 4220000,
+                                MaxHeight = 15240,
+                                Role = Role.Multirole,
+                                MaxWeaponsCapacity = 8,
+                                 ImageFileName = "aircrafts/f-16.jpg"
+                            },
+                };
+
+                _context.Aircrafts.AddRange(aircrafts);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"Seeded {aircrafts.Count} aircrafts.");
+            }
+            else
+            {
+                _logger.LogInformation("Aircrafts already seeded.");
+            }
+
+            _logger.LogInformation("Removing existing weapons...");
+            _context.Weapons.RemoveRange(_context.Weapons);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Existing weapons removed.");
 
             if (!_context.Weapons.Any())
             {
@@ -101,69 +164,6 @@ namespace AviationSalon.Infrastructure
             else
             {
                 _logger.LogInformation("Weapons already seeded.");
-            }            
-
-            if (!_context.Aircrafts.Any())
-            {
-                _logger.LogInformation("Seeding aircrafts...");
-
-                var aircrafts = new List<AircraftEntity>
-                {
-                    new AircraftEntity
-                            {
-                                Model = "MiG-29",
-                                Range = 1430000,
-                                MaxHeight = 18013,
-                                Role = Role.Fighter,
-                                MaxWeaponsCapacity = 6,
-                                 ImageFileName = "aircrafts/mig-29.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "Su-27",
-                                Range = 3300000,
-                                MaxHeight = 20000,
-                                Role = Role.Fighter,
-                                MaxWeaponsCapacity = 8,
-                                 ImageFileName = "aircrafts/su-27.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "Su-24",
-                                Range = 1850000,
-                                MaxHeight = 11000,
-                                Role = Role.Bomber,
-                                MaxWeaponsCapacity = 12,
-                                 ImageFileName = "aircrafts/su-24.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "Su-25",
-                                Range = 750000,
-                                MaxHeight = 5000,
-                                Role = Role.CloseAirSupport,
-                                MaxWeaponsCapacity = 10,
-                                 ImageFileName = "aircrafts/su-25.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "F-16",
-                                Range = 4220000,
-                                MaxHeight = 15240,
-                                Role = Role.Multirole,
-                                MaxWeaponsCapacity = 8,
-                                 ImageFileName = "aircrafts/f-16.jpg"
-                            },
-                };
-
-                _context.Aircrafts.AddRange(aircrafts);
-                await _context.SaveChangesAsync();
-
-                _logger.LogInformation($"Seeded {aircrafts.Count} aircrafts.");
-            }
-            else
-            {
-                _logger.LogInformation("Aircrafts already seeded.");
             }
 
             _logger.LogInformation("Data seeding completed.");
