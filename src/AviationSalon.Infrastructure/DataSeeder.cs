@@ -45,7 +45,7 @@ namespace AviationSalon.Infrastructure
                                 MaxHeight = 18013,
                                 Role = Role.Fighter,
                                 MaxWeaponsCapacity = 6,
-                                 ImageFileName = "aircrafts/mig-29.jpg"
+                                ImageFileName = "aircrafts/mig-29.jpg"
                             },
                             new AircraftEntity
                             {
@@ -54,7 +54,7 @@ namespace AviationSalon.Infrastructure
                                 MaxHeight = 20000,
                                 Role = Role.Fighter,
                                 MaxWeaponsCapacity = 8,
-                                 ImageFileName = "aircrafts/su-27.jpg"
+                                ImageFileName = "aircrafts/su-27.jpg"
                             },
                             new AircraftEntity
                             {
@@ -63,7 +63,7 @@ namespace AviationSalon.Infrastructure
                                 MaxHeight = 11000,
                                 Role = Role.Bomber,
                                 MaxWeaponsCapacity = 12,
-                                 ImageFileName = "aircrafts/su-24.jpg"
+                                ImageFileName = "aircrafts/su-24.jpg"
                             },
                             new AircraftEntity
                             {
@@ -72,7 +72,7 @@ namespace AviationSalon.Infrastructure
                                 MaxHeight = 5000,
                                 Role = Role.CloseAirSupport,
                                 MaxWeaponsCapacity = 10,
-                                 ImageFileName = "aircrafts/su-25.jpg"
+                                ImageFileName = "aircrafts/su-25.jpg"
                             },
                             new AircraftEntity
                             {
@@ -81,7 +81,7 @@ namespace AviationSalon.Infrastructure
                                 MaxHeight = 15240,
                                 Role = Role.Multirole,
                                 MaxWeaponsCapacity = 8,
-                                 ImageFileName = "aircrafts/f-16.jpg"
+                                ImageFileName = "aircrafts/f-16.jpg"
                             },
                 };
 
@@ -120,7 +120,7 @@ namespace AviationSalon.Infrastructure
                                 Type = WeaponType.AntiRadiation,
                                 GuidedSystem = GuidedSystemType.PassiveRadar,
                                 Range = 150000,
-                                FirePower = 250
+                                FirePower = 250,
                             },
                             new WeaponEntity
                             {
@@ -136,7 +136,7 @@ namespace AviationSalon.Infrastructure
                                 Type = WeaponType.AirToAir,
                                 GuidedSystem = GuidedSystemType.Infrared,
                                 Range = 22000,
-                                FirePower = 60
+                                FirePower = 60,
                             },
                             new WeaponEntity
                             {
@@ -144,7 +144,7 @@ namespace AviationSalon.Infrastructure
                                 Type = WeaponType.AirToAir,
                                 GuidedSystem = GuidedSystemType.Infrared,
                                 Range = 30000,
-                                FirePower = 50
+                                FirePower = 50,
                             },
                             new WeaponEntity
                             {

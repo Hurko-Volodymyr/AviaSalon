@@ -10,7 +10,7 @@ namespace AviationSalon.Core.Data.Entities
         public GuidedSystemType GuidedSystem { get; set; }
         public int Range { get; set; }
         public int FirePower { get; set; }
-        public AircraftEntity Aircraft { get; set; } = new AircraftEntity();
-        public int AircraftId { get; set; }
+        public AircraftEntity? Aircraft { get; set; }
+        public int? AircraftId { get; set; }
     }
 }

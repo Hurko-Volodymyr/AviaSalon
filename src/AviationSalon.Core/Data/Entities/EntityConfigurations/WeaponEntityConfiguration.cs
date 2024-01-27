@@ -15,9 +15,11 @@ namespace AviationSalon.Core.Data.Entities.EntityConfigurations
             builder.Property(w => w.GuidedSystem).IsRequired();
             builder.Property(w => w.Range).IsRequired();
             builder.Property(w => w.FirePower).IsRequired();
+
             builder.HasOne(w => w.Aircraft)
                 .WithMany(a => a.Weapons)
-                .HasForeignKey(w => w.AircraftId);
+                .HasForeignKey(w => w.AircraftId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
