@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+
+    @inject IStringLocalizer<Views_Home_Index> Localizer
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,10 +32,19 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <!-- Navigation items, e.g., -->
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
                 </ul>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Localizer["Language"]
+                    </button>
+
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <a class="dropdown-item" href="#" data-lang="uk-UA">Українська</a>
+                        <a class="dropdown-item" href="#" data-lang="en-GB">English</a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -47,7 +57,6 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <!-- Footer content, e.g., -->
                     <p>&copy; 2023 Aviation Shop</p>
                 </div>
             </div>
@@ -55,6 +64,37 @@
     </footer>
 
     <!-- Bootstrap and other scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="~/js/site.js"></script>
+
+    <!-- AJAX script for language change -->
+    <script>
+        function changeLanguage(culture) {
+            $.ajax({
+                url: '/Home/changelanguage?culture=' + culture,
+                type: 'POST',
+                success: function () {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.error('Error during language change:', error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('[data-lang]').on('click', function () {
+                var selectedLang = $(this).data('lang');
+                changeLanguage(selectedLang);
+            });
+            var currentLang = $('html').attr('lang');
+            $('#languageDropdown').text(currentLang);
+        });
+
+    </script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

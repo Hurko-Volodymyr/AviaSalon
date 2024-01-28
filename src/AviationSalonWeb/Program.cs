@@ -1,21 +1,15 @@
 using AviationSalon.App.Services;
-using AviationSalon.Core.Abstractions;
 using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Infrastructure;
 using AviationSalon.Infrastructure.Identity;
 using AviationSalon.Infrastructure.Repositories;
-using AviationSalonWeb.Resources;
-using IdentityServer4.AspNetIdentity;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Globalization;
 
 namespace AviationSalonWeb
@@ -47,7 +41,6 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<IRepository<AircraftEntity>, AircraftRepository>();
             builder.Services.AddScoped<IRepository<WeaponEntity>, WeaponRepository>();
             builder.Services.AddScoped<DataSeeder>();
-            builder.Services.AddScoped<Localizer>();
 
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IAircraftCatalogService, AircraftCatalogService>();
@@ -57,13 +50,13 @@ namespace AviationSalonWeb
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddLogging();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddViewLocalization();
 
             builder.Services.AddRazorPages();
             var supportedCultures = new[]
             {
-                new CultureInfo("en"),
-                new CultureInfo("ua")
+                new CultureInfo("uk-UA"),
+                new CultureInfo("en-GB"),                
             };
 
             builder.Services.AddSwaggerGen(c =>
@@ -90,7 +83,7 @@ namespace AviationSalonWeb
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("ua"),
+                DefaultRequestCulture = new RequestCulture("uk-UA"),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
@@ -112,7 +105,8 @@ namespace AviationSalonWeb
 
             app.UseRouting();
 
-            // app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

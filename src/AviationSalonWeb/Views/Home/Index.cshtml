@@ -1,19 +1,23 @@
 ﻿@using AviationSalon.Core.Data.Entities
-@using AviationSalonWeb.Resources
-@inject Localizer Localizer
+@using AviationSalonWeb.Controllers
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<HomeController> Localizer
 @{
-    ViewData["Title"] = Localizer["Welcome to Aviation Shop"];
+    ViewData["WelcomeMessage"] = Localizer["Welcome to Aviation Shop"];
+    ViewData["ExploreMessage"] = Localizer["Explore our collection of aviation products."];
+    ViewData["SelectAircraft"] = Localizer["Select an Aircraft for the Mission"];
+
     var aircraftList = ViewData["AircraftList"] as List<AircraftEntity>;
 }
 @model List<AircraftEntity>
 
 <div class="container">
-    <h1 class="display-4 text-center">@Localizer["Welcome to Aviation Shop"]</h1>
-    <p class="text-center">@Localizer["Explore our collection of aviation products."]</p>
+    <h1 class="display-4 text-center">@ViewData["WelcomeMessage"]</h1>
+    <p class="text-center">@ViewData["ExploreMessage"]</p>
 
     <div class="row mb-4">
         <div class="col-md-12">
-            <h2 class="text-center">@Localizer["Select an Aircraft for the Mission"]</h2>
+            <h2 class="text-center">@ViewData["SelectAircraft"]</h2>
         </div>
         @foreach (var aircraft in aircraftList)
         {
@@ -37,5 +41,13 @@
 <!-- Include jQuery and TypeScript -->
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/js/index.ts"></script>
+    <script>
+        $(document).ready(function () {
+            $('.view-details-btn').on('click', function () {
+                var aircraftId = $(this).data('id');
+                var url = '/home/aircraftdetails/' + aircraftId;
+                window.location.href = url;
+            });
+        });
+    </script>
 }

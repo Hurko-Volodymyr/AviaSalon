@@ -1,4 +1,7 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sayHello = void 0;
+function sayHello() {
+    console.log('Hello from TypeScript!');
+}
+exports.sayHello = sayHello;
