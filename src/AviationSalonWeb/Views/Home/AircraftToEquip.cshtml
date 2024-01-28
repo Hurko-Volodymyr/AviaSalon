@@ -1,8 +1,4 @@
-﻿@section scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-}
-
-@{
+﻿@{
     var aircraft = Model.Item1;
     var weapons = Model.Item2;
 }
@@ -12,8 +8,8 @@
     <div class="container text-center">
         <img src="~/images/@aircraft.ImageFileName" class="img-fluid" alt="Aircraft Image">
         <h1 class="display-4">@aircraft.Model</h1>
-
         <h2 class="mt-4">Weapon Information</h2>
+        <p>Max Weapons Capacity: @aircraft.MaxWeaponsCapacity</p>
 
         @foreach (var weapon in weapons)
         {
@@ -30,44 +26,58 @@
             </div>
         }
 
-        <button class="btn btn-primary mt-3" id="backButton">Back to Aircraft Details</button>
+        <div class="mt-3">
+            <button class="btn btn-primary" id="backButton">Back to Aircraft Details</button>
+            <button class="btn btn-info" id="equipPageButton">Equip Page</button>
+        </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", function () {
             console.log('Document ready');
+            var maxWeaponsCapacity = @aircraft.MaxWeaponsCapacity;
 
-            $('.plusButton, .minusButton').click(function () {
-                var weaponId = $(this).data('id');
-                var currentCount = parseInt($('.weaponCount[data-id="' + weaponId + '"]').text());
-                var newCount = currentCount + ($(this).hasClass('plusButton') ? 1 : -1);
+            document.querySelectorAll('.plusButton, .minusButton').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var weaponId = this.getAttribute('data-id');
+                    var currentCount = parseInt(document.querySelector('.weaponCount[data-id="' + weaponId + '"]').textContent);
+                    var newCount = currentCount + (this.classList.contains('plusButton') ? 1 : -1);
 
-                $.ajax({
-                    url: '/home/updateweaponcount/@aircraft.AircraftId/' + weaponId + '/' + newCount,
-                    type: 'GET',
-                    success: function (data) {
-                        if (data.success) {
-                            console.log('Update count success');
-                            $('.weaponCount[data-id="' + weaponId + '"]').text(newCount);
-                        } else {
-                            console.log('Update count error', data.message);
-                            alert(data.message);
-                        }
-                    },
-                    error: function (error) {
-                        console.log('Update count error', error);
-                        alert('Error occurred while updating weapon count.');
+                    if (newCount >= 0 && newCount <= maxWeaponsCapacity) {
+                        fetch('/home/updateweaponcount/@aircraft.AircraftId/' + weaponId + '/' + newCount)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log('Update count success');
+                                    document.querySelector('.weaponCount[data-id="' + weaponId + '"]').textContent = newCount;
+                                } else {
+                                    console.log('Update count error', data.message);
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.log('Update count error', error);
+                                alert('Error occurred while updating weapon count.');
+                            });
+                    } else {
+                        alert('Invalid weapon count. Must be between 0 and ' + maxWeaponsCapacity);
                     }
                 });
             });
 
-            $('#backButton').click(function () {
+            document.getElementById('backButton').addEventListener('click', function () {
                 console.log('Back button clicked');
                 window.location.href = '/home/aircraftdetails/@aircraft.AircraftId';
             });
+
+            document.getElementById('equipPageButton').addEventListener('click', function () {
+                console.log('Equip page button clicked');
+                // need actual URL
+                window.location.href = '/home/equip';
+            });
         });
     </script>
-
 }
 else
 {
