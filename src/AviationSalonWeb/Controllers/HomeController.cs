@@ -25,9 +25,7 @@ namespace AviationSalonWeb.Controllers
         public async Task<IActionResult> Index()
         {
             var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
-            var weaponsList = await _weaponService.GetWeaponsListAsync();
             ViewData["AircraftList"] = aircraftList;
-            ViewData["WeaponsList"] = weaponsList;
 
             return View();
         }

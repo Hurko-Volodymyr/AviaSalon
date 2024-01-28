@@ -1,45 +1,41 @@
 ﻿@using AviationSalon.Core.Data.Entities
+@using AviationSalonWeb.Resources
+@inject Localizer Localizer
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = Localizer["Welcome to Aviation Shop"];
+    var aircraftList = ViewData["AircraftList"] as List<AircraftEntity>;
 }
 @model List<AircraftEntity>
 
 <div class="container">
-    <h1 class="display-4 text-center">Welcome to Aviation Shop</h1>
-    <p class="text-center">Explore our collection of aviation products.</p>
+    <h1 class="display-4 text-center">@Localizer["Welcome to Aviation Shop"]</h1>
+    <p class="text-center">@Localizer["Explore our collection of aviation products."]</p>
 
     <div class="row mb-4">
-        <!-- Display Aircraft -->
-        @foreach (var aircraft in (List<AircraftEntity>)ViewData["AircraftList"])
+        <div class="col-md-12">
+            <h2 class="text-center">@Localizer["Select an Aircraft for the Mission"]</h2>
+        </div>
+        @foreach (var aircraft in aircraftList)
         {
             <div class="col-md-3">
                 <div class="card">
                     <img src="~/images/@aircraft.ImageFileName" class="card-img-top" alt="Aircraft Image">
                     <div class="card-body">
                         <h5 class="card-title">@aircraft.Model</h5>
-                        <p class="card-text">Range: @aircraft.Range</p>
-                        <p class="card-text">Max Height: @aircraft.MaxHeight</p>
-                        <p class="card-text">Max Weapons Capacity: @aircraft.MaxWeaponsCapacity</p>
+                        <p class="card-text">@Localizer["Role"]: @aircraft.Role</p>
+                        <p class="card-text">@Localizer["Max Weapons Capacity"]: @aircraft.MaxWeaponsCapacity</p>
 
-                        <a href="#" class="btn btn-primary">View Details</a>
+                        <button class="btn btn-primary view-details-btn" data-id="@aircraft.AircraftId">@Localizer["View Details"]</button>
+                        <button class="btn btn-success equip-aircraft-btn" data-id="@aircraft.AircraftId">@Localizer["Equip Aircraft"]</button>
                     </div>
                 </div>
             </div>
         }
-
-        <!-- Display Weapons -->
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">All Weapons</h5>
-                    <ul>
-                        @foreach (var weapon in (List<WeaponEntity>)ViewData["WeaponsList"])
-                        {
-                            <li>@weapon.Name - Type: @weapon.Type, Range: @weapon.Range, Fire Power: @weapon.FirePower</li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
+<!-- Include jQuery and TypeScript -->
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/index.ts"></script>
+}

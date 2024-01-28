@@ -6,6 +6,7 @@ using AviationSalon.Core.Data.Entities;
 using AviationSalon.Infrastructure;
 using AviationSalon.Infrastructure.Identity;
 using AviationSalon.Infrastructure.Repositories;
+using AviationSalonWeb.Resources;
 using IdentityServer4.AspNetIdentity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -46,6 +47,7 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<IRepository<AircraftEntity>, AircraftRepository>();
             builder.Services.AddScoped<IRepository<WeaponEntity>, WeaponRepository>();
             builder.Services.AddScoped<DataSeeder>();
+            builder.Services.AddScoped<Localizer>();
 
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IAircraftCatalogService, AircraftCatalogService>();
@@ -88,7 +90,7 @@ namespace AviationSalonWeb
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("en"),
+                DefaultRequestCulture = new RequestCulture("ua"),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
