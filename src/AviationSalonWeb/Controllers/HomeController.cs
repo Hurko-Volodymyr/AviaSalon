@@ -94,7 +94,7 @@ namespace AviationSalonWeb.Controllers
         {
             if (data.Count < 0)
             {
-                return Json(new { success = false, message = "Count should be greater than zero." });
+                return Json(new { success = false, message = "Count should be positive." });
             }
 
             try

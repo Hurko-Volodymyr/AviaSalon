@@ -1,7 +1,4 @@
-﻿@using AviationSalon.Core.Data.Entities
-@model Tuple<List<AircraftEntity>, List<WeaponEntity>>
-
-<div class="container text-center">
+﻿<div class="container text-center">
     <h1 class="display-4">Your aircrafts:</h1>
 
     <h2 class="mt-4">Selected Aircraft</h2>
@@ -14,7 +11,7 @@
     @foreach (var weapon in Model.Item2)
     {
         <p>Weapon Name: @weapon.Name</p>
-        <p>Weapon Name: @weapon.Type</p>
+        <p>Weapon Type: @weapon.Type</p>
     }
 
     <div class="mt-3">
