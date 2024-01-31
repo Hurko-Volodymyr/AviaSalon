@@ -38,7 +38,6 @@
     </div>
 </div>
 
-<!-- Include jQuery and TypeScript -->
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -46,7 +45,34 @@
             $('.view-details-btn').on('click', function () {
                 var aircraftId = $(this).data('id');
                 var url = '/home/aircraftdetails/' + aircraftId;
-                window.location.href = url;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        window.location.href = url;
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            $('.equip-aircraft-btn').click(function () {
+                var aircraftId = $(this).data('id');
+                console.log('Equip button clicked for aircraft ID: ' + aircraftId);
+
+                $.ajax({
+                    url: '/home/toequip/' + aircraftId,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Equip success');
+                        window.location.href = '/home/toequip/' + aircraftId;
+                    },
+                    error: function (error) {
+                        console.log('Equip error', error);
+                    }
+                });
             });
         });
     </script>

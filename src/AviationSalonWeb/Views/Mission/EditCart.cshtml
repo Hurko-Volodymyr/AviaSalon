@@ -1,0 +1,72 @@
+﻿@using AviationSalon.Core.Data.Entities
+@model Tuple<List<AircraftEntity>, List<WeaponEntity>>
+
+@if (Model != null)
+{
+    <div class="container text-center">
+        <h1 class="display-4">Mission Cart</h1>
+
+        <h2 class="mt-4">Selected Aircraft</h2>
+        @foreach (var aircraft in Model.Item1)
+        {
+            <div>
+                <p>Model: @aircraft.Model</p>
+                <!-- Добавьте другие свойства самолета по необходимости -->
+            </div>
+            <hr />
+        }
+
+        <h2 class="mt-4">Selected Weapons</h2>
+        @foreach (var weapon in Model.Item2)
+        {
+            <div>
+                <p>Name: @weapon.Name</p>
+                <!-- Добавьте другие свойства оружия по необходимости -->
+            </div>
+            <hr />
+        }
+
+        <div class="mt-3">
+            <button class="btn btn-primary" id="backButton">Back to Mission Cart</button>
+            <button class="btn btn-success" id="submitOrderButton">Submit Order</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log('Document ready');
+
+            $('#backButton').click(function () {
+                console.log('Back button clicked');
+                // Need actual URL
+                window.location.href = '/home/cart';  // Change to the actual URL for the cart
+            });
+
+            $('#submitOrderButton').click(function () {
+                console.log('Submit order button clicked');
+
+                // Отправляем данные на сервер
+                $.ajax({
+                    url: '/mission/submitorder',  // Замените на фактический URL для отправки заказа
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ aircraftList: @Html.Raw(Json.Serialize(Model.Item1)), weaponList: @Html.Raw(Json.Serialize(Model.Item2)) }),
+                    success: function (data) {
+                        console.log('Order submitted successfully');
+                        // Перенаправляем пользователя на страницу подтверждения заказа
+                        window.location.href = '/mission/orderconfirmation';  // Замените на фактический URL для подтверждения заказа
+                    },
+                    error: function (error) {
+                        console.log('Submit order error', error);
+                        alert('Error occurred while submitting the order.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+else
+{
+    <p>No items in the mission cart</p>
+}

@@ -1,5 +1,6 @@
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
+using AviationSalon.WebUI.Models;
 using AviationSalonWeb.Models;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -87,20 +88,20 @@ namespace AviationSalonWeb.Controllers
             return View(equipData);
         }
 
-        [HttpGet]
-        [Route("updateweaponcount/{aircraftId}/{weaponId}/{count}")]
-        public async Task<IActionResult> UpdateWeaponCount(int aircraftId, int weaponId, int count)
+        [HttpPost]
+        [Route("updateweaponcount")]
+        public async Task<IActionResult> UpdateWeaponCount([FromBody] UpdateWeaponCountDataModel data)
         {
-            if (count <= 0)
+            if (data.Count < 0)
             {
                 return Json(new { success = false, message = "Count should be greater than zero." });
             }
 
             try
             {
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    await _aircraftCatalogService.EquipAircraftWithWeaponAsync(aircraftId, weaponId);
+                    await _aircraftCatalogService.EquipAircraftWithWeaponAsync(data.AircraftId, data.WeaponId);
                 }
 
                 return Json(new { success = true });
@@ -110,6 +111,7 @@ namespace AviationSalonWeb.Controllers
                 return Json(new { success = false, message = $"Error equipping aircraft with weapon. Details: {ex.Message}" });
             }
         }
+
 
 
         [HttpGet]
