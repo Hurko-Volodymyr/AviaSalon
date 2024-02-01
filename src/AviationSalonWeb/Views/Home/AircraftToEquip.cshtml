@@ -29,7 +29,6 @@
 
         <button class="btn btn-primary mt-3" id="backButton">Back to Aircraft Details</button>
         <button class="btn btn-info mt-3" id="cartButton">Submit and go to the mission details</button>
-
     </div>
 
     @section scripts {
@@ -56,7 +55,7 @@
                             type: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify({
-                                AircraftId: @aircraft.AircraftId,
+                                AircraftId: '@aircraft.AircraftId',
                                 WeaponId: weaponId,
                                 Count: newCount
                             }),
@@ -82,12 +81,9 @@
                     }
                 });
 
-
-
-
                 $('#backButton').click(function () {
                     console.log('Back button clicked');
-                    window.location.href = '/home/aircraftdetails/@aircraft.AircraftId';
+                    window.location.href = '/home/aircraftdetails/' + '@aircraft.AircraftId';
                 });
 
                 function getTotalWeaponsCount() {
@@ -103,40 +99,38 @@
                         toastr.error('The aircraft has reached the maximum number of weapons.');
                     }
                 }
-            });
 
+                $('#cartButton').click(function () {
+                    console.log('Cart button clicked');
 
-            $('#cartButton').click(function () {
-                console.log('Cart button clicked');
+                    var selectedAircraft = [{ AircraftId: '@aircraft.AircraftId' }];
+                    var selectedWeapons = [];
 
-                var selectedAircraft = [{ AircraftId: @aircraft.AircraftId }];
-                var selectedWeapons = [];  
-
-                $.ajax({
-                    url: '/mission/missiondetails',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        SelectedAircraft: selectedAircraft,
-                        SelectedWeapons: selectedWeapons
-                    }),
-                    success: function (data) {
-                        if (data.success) {
-                            console.log('Add to cart success');
-                            toastr.success('Aircraft added to cart successfully!');
-                            window.location.href = '/missiondetails';
-                        } else {
-                            console.log('Add to cart error', data.message || 'An error occurred while adding aircraft to cart.');
-                            toastr.error(data.message || 'An error occurred while adding aircraft to cart.');
+                    $.ajax({
+                        url: '/mission/missiondetails',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            SelectedAircraft: selectedAircraft,
+                            SelectedWeapons: selectedWeapons
+                        }),
+                        success: function (data) {
+                            if (data.success) {
+                                console.log('Add to cart success');
+                                toastr.success('Aircraft added to cart successfully!');
+                                window.location.href = '/missiondetails';
+                            } else {
+                                console.log('Add to cart error', data.message || 'An error occurred while adding aircraft to cart.');
+                                toastr.error(data.message || 'An error occurred while adding aircraft to cart.');
+                            }
+                        },
+                        error: function (error) {
+                            console.log('Add to cart error', error);
+                            toastr.error('Error occurred while adding aircraft to cart.');
                         }
-                    },
-                    error: function (error) {
-                        console.log('Add to cart error', error);
-                        toastr.error('Error occurred while adding aircraft to cart.');
-                    }
+                    });
                 });
             });
-
         </script>
     }
 }

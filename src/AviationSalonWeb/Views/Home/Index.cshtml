@@ -29,8 +29,8 @@
                         <p class="card-text">@Localizer["Role"]: @aircraft.Role</p>
                         <p class="card-text">@Localizer["Max Weapons Capacity"]: @aircraft.MaxWeaponsCapacity</p>
 
-                        <button class="btn btn-primary view-details-btn" data-id="@aircraft.AircraftId">@Localizer["View Details"]</button>
-                        <button class="btn btn-success equip-aircraft-btn" data-id="@aircraft.AircraftId">@Localizer["Equip Aircraft"]</button>
+                        <button class="btn btn-primary view-details-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["View Details"]</button>
+                        <button class="btn btn-success equip-aircraft-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["Equip Aircraft"]</button>
                     </div>
                 </div>
             </div>

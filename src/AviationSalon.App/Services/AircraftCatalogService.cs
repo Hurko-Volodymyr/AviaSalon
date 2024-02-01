@@ -24,9 +24,15 @@ namespace AviationSalon.App.Services
         public async Task<List<AircraftEntity>> GetAircraftListAsync()
         {
             try
-            {               
+            {
                 var aircraftEntities = await _aircraftRepository.GetAllAsync();
-                _logger.LogInformation($"Getting the list of aircrafts with count:{aircraftEntities.Count()}.");
+
+                aircraftEntities = aircraftEntities
+                    .OrderBy(a => a.Model)
+                    .ThenBy(a => a.Role)
+                    .ToList();
+
+                _logger.LogInformation($"Getting the sorted list of aircrafts with count: {aircraftEntities.Count()}.");
                 return aircraftEntities;
             }
             catch (Exception ex)
@@ -35,6 +41,7 @@ namespace AviationSalon.App.Services
                 throw;
             }
         }
+
 
         public async Task<AircraftEntity> GetAircraftDetailsAsync(string aircraftId)
         {

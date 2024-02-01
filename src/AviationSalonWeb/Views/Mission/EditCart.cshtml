@@ -11,7 +11,6 @@
         {
             <div>
                 <p>Model: @aircraft.Model</p>
-                <!-- Добавьте другие свойства самолета по необходимости -->
             </div>
             <hr />
         }
@@ -21,7 +20,6 @@
         {
             <div>
                 <p>Name: @weapon.Name</p>
-                <!-- Добавьте другие свойства оружия по необходимости -->
             </div>
             <hr />
         }
@@ -39,23 +37,23 @@
 
             $('#backButton').click(function () {
                 console.log('Back button clicked');
-                // Need actual URL
-                window.location.href = '/home/cart';  // Change to the actual URL for the cart
+                window.location.href = '/home/cart';
             });
 
             $('#submitOrderButton').click(function () {
                 console.log('Submit order button clicked');
 
-                // Отправляем данные на сервер
+                var aircraftList = @Html.Raw(Json.Serialize(Model.Item1.Select(a => a.AircraftId.ToString())));
+                var weaponList = @Html.Raw(Json.Serialize(Model.Item2.Select(w => w.WeaponId.ToString())));
+
                 $.ajax({
-                    url: '/mission/submitorder',  // Замените на фактический URL для отправки заказа
+                    url: '/mission/submitorder',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ aircraftList: @Html.Raw(Json.Serialize(Model.Item1)), weaponList: @Html.Raw(Json.Serialize(Model.Item2)) }),
+                    data: JSON.stringify({ aircraftList: aircraftList, weaponList: weaponList }),
                     success: function (data) {
                         console.log('Order submitted successfully');
-                        // Перенаправляем пользователя на страницу подтверждения заказа
-                        window.location.href = '/mission/orderconfirmation';  // Замените на фактический URL для подтверждения заказа
+                        window.location.href = '/mission/orderconfirmation';
                     },
                     error: function (error) {
                         console.log('Submit order error', error);
