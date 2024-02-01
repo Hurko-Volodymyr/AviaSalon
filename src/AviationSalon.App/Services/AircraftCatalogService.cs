@@ -36,7 +36,7 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<AircraftEntity> GetAircraftDetailsAsync(int aircraftId)
+        public async Task<AircraftEntity> GetAircraftDetailsAsync(string aircraftId)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace AviationSalon.App.Services
         }
 
 
-        public async Task EquipAircraftWithWeaponAsync(int aircraftId, int weaponId)
+        public async Task EquipAircraftWithWeaponAsync(string aircraftId, string weaponId)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace AviationSalon.App.Services
         }
 
 
-        public async Task ClearLoadedWeaponsAsync(int aircraftId)
+        public async Task ClearLoadedWeaponsAsync(string aircraftId)
         {
             try
             {

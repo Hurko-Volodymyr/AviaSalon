@@ -34,28 +34,28 @@ namespace AviationSalon.Tests.Repositories
 
             _customer = new CustomerEntity
             {
-                CustomerId = 1,
+                CustomerId = "1",
                 Name = "John Doe",
                 ContactInformation = "john@example.com",
             };
 
             _orderItem1 = new OrderItemEntity
             {
-                OrderItemId = 1,
-                AircraftId = 1,
+                OrderItemId = "1",
+                AircraftId = "1",
                 Quantity = 2,
             };
 
             _orderItem2 = new OrderItemEntity
             {
-                OrderItemId = 2,
-                AircraftId = 2,
+                OrderItemId = "2",
+                AircraftId = "2",
                 Quantity = 1,
             };
 
             _existingOrder = new OrderEntity
             {
-                OrderId = 1,
+                OrderId = "1",
                 OrderDate = DateTime.Now,
                 CustomerId = _customer.CustomerId,
                 Customer = _customer,
@@ -64,8 +64,8 @@ namespace AviationSalon.Tests.Repositories
                 Status = OrderStatus.Pending,
             };
 
-            _nonExistingCustomer = new CustomerEntity { CustomerId = -12341 };
-            _nonExistingOrder = new OrderEntity { OrderId = -12312341 };
+            _nonExistingCustomer = new CustomerEntity { CustomerId = "-234592" };
+            _nonExistingOrder = new OrderEntity { OrderId = "-5238-127-" };
         }
 
         public void Dispose()
@@ -136,34 +136,45 @@ namespace AviationSalon.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnNullForNonExistingCustomer()
         {
             // Act
-            var result = await _customerRepository.GetByIdAsync(123);
+            var result = await _customerRepository.GetByIdAsync(_nonExistingCustomer.CustomerId);
 
             // Assert
             result.Should().BeNull();
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingCustomer(int nonExistingCustomerId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingCustomerWithNullId()
         {
             // Arrange
-            _nonExistingCustomer.CustomerId = nonExistingCustomerId;
+            _nonExistingCustomer.CustomerId = null;
 
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _customerRepository.UpdateAsync(_nonExistingCustomer));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingCustomerWithNonNullOrEmptyId()
+        {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _customerRepository.UpdateAsync(_nonExistingCustomer));
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingCustomer(int nonExistingCustomerId)
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingCustomerWithNullId()
         {
             // Arrange
-            _nonExistingCustomer.CustomerId = nonExistingCustomerId;
+            _nonExistingCustomer.CustomerId = null;
 
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _customerRepository.DeleteAsync(_nonExistingCustomer));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingCustomerWithNonNullOrEmptyId()
+        {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _customerRepository.DeleteAsync(_nonExistingCustomer));
         }
+
     }
 }

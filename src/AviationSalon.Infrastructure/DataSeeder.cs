@@ -34,50 +34,114 @@ namespace AviationSalon.Infrastructure
                 var aircrafts = new List<AircraftEntity>
                 {
                     new AircraftEntity
-                            {
-                                Model = "MiG-29",
-                                Range = 1430000,
-                                MaxHeight = 18013,
-                                Role = Role.Fighter,
-                                MaxWeaponsCapacity = 6,
-                                ImageFileName = "aircrafts/mig-29.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "Su-27",
-                                Range = 3300000,
-                                MaxHeight = 20000,
-                                Role = Role.Fighter,
-                                MaxWeaponsCapacity = 8,
-                                ImageFileName = "aircrafts/su-27.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "Su-24",
-                                Range = 1850000,
-                                MaxHeight = 11000,
-                                Role = Role.Bomber,
-                                MaxWeaponsCapacity = 12,
-                                ImageFileName = "aircrafts/su-24.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "Su-25",
-                                Range = 750000,
-                                MaxHeight = 5000,
-                                Role = Role.CloseAirSupport,
-                                MaxWeaponsCapacity = 10,
-                                ImageFileName = "aircrafts/su-25.jpg"
-                            },
-                            new AircraftEntity
-                            {
-                                Model = "F-16",
-                                Range = 4220000,
-                                MaxHeight = 15240,
-                                Role = Role.Multirole,
-                                MaxWeaponsCapacity = 8,
-                                ImageFileName = "aircrafts/f-16.jpg"
-                            },
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "MiG-29",
+                        Range = 1430000,
+                        MaxHeight = 18013,
+                        Role = Role.Fighter,
+                        MaxWeaponsCapacity = 6,
+                        ImageFileName = "aircrafts/mig-29.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "Su-27",
+                        Range = 3300000,
+                        MaxHeight = 20000,
+                        Role = Role.Fighter,
+                        MaxWeaponsCapacity = 8,
+                        ImageFileName = "aircrafts/su-27.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "Su-24",
+                        Range = 1850000,
+                        MaxHeight = 11000,
+                        Role = Role.Bomber,
+                        MaxWeaponsCapacity = 12,
+                        ImageFileName = "aircrafts/su-24.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "Su-25",
+                        Range = 750000,
+                        MaxHeight = 5000,
+                        Role = Role.CloseAirSupport,
+                        MaxWeaponsCapacity = 10,
+                        ImageFileName = "aircrafts/su-25.jpg"
+                    },
+
+                    new AircraftEntity
+                    {                        
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "F-16",
+                        Range = 4220000,
+                        MaxHeight = 15240,
+                        Role = Role.Multirole,
+                        MaxWeaponsCapacity = 8,
+                        ImageFileName = "aircrafts/f-16.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "MiG-29",
+                        Range = 1430000,
+                        MaxHeight = 18013,
+                        Role = Role.Fighter,
+                        MaxWeaponsCapacity = 6,
+                        ImageFileName = "aircrafts/mig-29.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "Su-27",
+                        Range = 3300000,
+                        MaxHeight = 20000,
+                        Role = Role.Fighter,
+                        MaxWeaponsCapacity = 8,
+                        ImageFileName = "aircrafts/su-27.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "Su-24",
+                        Range = 1850000,
+                        MaxHeight = 11000,
+                        Role = Role.Bomber,
+                        MaxWeaponsCapacity = 12,
+                        ImageFileName = "aircrafts/su-24.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "Su-25",
+                        Range = 750000,
+                        MaxHeight = 5000,
+                        Role = Role.CloseAirSupport,
+                        MaxWeaponsCapacity = 10,
+                        ImageFileName = "aircrafts/su-25.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "F-16",
+                        Range = 4220000,
+                        MaxHeight = 15240,
+                        Role = Role.Multirole,
+                        MaxWeaponsCapacity = 8,
+                        ImageFileName = "aircrafts/f-16.jpg"
+                    },
                 };
 
                 _context.Aircrafts.AddRange(aircrafts);
@@ -102,53 +166,64 @@ namespace AviationSalon.Infrastructure
                 var weapons = new List<WeaponEntity>
                 {
                     new WeaponEntity
-                            {
-                                Name = "AIM-120 AMRAAM",
-                                Type = WeaponType.AirToAir,
-                                GuidedSystem = GuidedSystemType.ActiveRadar,
-                                Range = 180000,
-                                FirePower = 150,
-                            },
-                            new WeaponEntity
-                            {
-                                Name = "AGM-88 HARM",
-                                Type = WeaponType.AntiRadiation,
-                                GuidedSystem = GuidedSystemType.PassiveRadar,
-                                Range = 150000,
-                                FirePower = 250,
-                            },
-                            new WeaponEntity
-                            {
-                                Name = "R-77 (AA-12 Adder)",
-                                Type = WeaponType.AirToAir,
-                                GuidedSystem = GuidedSystemType.ActiveRadar,
-                                Range = 190000,
-                                FirePower = 120,
-                            },
-                            new WeaponEntity
-                            {
-                                Name = "AIM-9 Sidewinder",
-                                Type = WeaponType.AirToAir,
-                                GuidedSystem = GuidedSystemType.Infrared,
-                                Range = 22000,
-                                FirePower = 60,
-                            },
-                            new WeaponEntity
-                            {
-                                Name = "R-73",
-                                Type = WeaponType.AirToAir,
-                                GuidedSystem = GuidedSystemType.Infrared,
-                                Range = 30000,
-                                FirePower = 50,
-                            },
-                            new WeaponEntity
-                            {
-                                Name = "GBU-12 Paveway II",
-                                Type = WeaponType.AirToGround,
-                                GuidedSystem = GuidedSystemType.Laser,
-                                Range = 12000,
-                                FirePower = 250,
-                            },
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "AIM-120 AMRAAM",
+                        Type = WeaponType.AirToAir,
+                        GuidedSystem = GuidedSystemType.ActiveRadar,
+                        Range = 180000,
+                        FirePower = 150,
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "AGM-88 HARM",
+                        Type = WeaponType.AntiRadiation,
+                        GuidedSystem = GuidedSystemType.PassiveRadar,
+                        Range = 150000,
+                        FirePower = 250,
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "R-77 (AA-12 Adder)",
+                        Type = WeaponType.AirToAir,
+                        GuidedSystem = GuidedSystemType.ActiveRadar,
+                        Range = 190000,
+                        FirePower = 120,
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "AIM-9 Sidewinder",
+                        Type = WeaponType.AirToAir,
+                        GuidedSystem = GuidedSystemType.Infrared,
+                        Range = 22000,
+                        FirePower = 60,
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "R-73",
+                        Type = WeaponType.AirToAir,
+                        GuidedSystem = GuidedSystemType.Infrared,
+                        Range = 30000,
+                        FirePower = 50,
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "GBU-12 Paveway II",
+                        Type = WeaponType.AirToGround,
+                        GuidedSystem = GuidedSystemType.Laser,
+                        Range = 12000,
+                        FirePower = 250,
+                    },
                 };
 
                 _context.Weapons.AddRange(weapons);

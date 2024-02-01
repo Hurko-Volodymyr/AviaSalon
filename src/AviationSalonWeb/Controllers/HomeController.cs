@@ -70,7 +70,7 @@ namespace AviationSalonWeb.Controllers
 
         [HttpGet]
         [Route("aircraftdetails/{id}")]
-        public async Task<IActionResult> AircraftDetails(int id)
+        public async Task<IActionResult> AircraftDetails(string id)
         {
             var aircraftDetails = await _aircraftCatalogService.GetAircraftDetailsAsync(id);
             return View(aircraftDetails);
@@ -78,7 +78,7 @@ namespace AviationSalonWeb.Controllers
 
         [HttpGet]
         [Route("toequip/{id}")]
-        public async Task<IActionResult> AircraftToEquip(int id)
+        public async Task<IActionResult> AircraftToEquip(string id)
         {
             var aircraftDetails = await _aircraftCatalogService.GetAircraftDetailsAsync(id);
             var weaponsList = await _weaponService.GetWeaponsListAsync();

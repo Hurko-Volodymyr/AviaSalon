@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AviationSalon.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,12 +16,13 @@ namespace AviationSalon.Infrastructure.Migrations
                 name: "Aircrafts",
                 columns: table => new
                 {
-                    AircraftId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AircraftId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Model = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Manufacturer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    YearOfManufacture = table.Column<int>(type: "integer", nullable: false),
-                    MaxWeaponsCapacity = table.Column<int>(type: "integer", nullable: false)
+                    Range = table.Column<int>(type: "integer", nullable: false),
+                    MaxHeight = table.Column<int>(type: "integer", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    ImageFileName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    MaxWeaponsCapacity = table.Column<int>(type: "integer", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -70,8 +72,7 @@ namespace AviationSalon.Infrastructure.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    CustomerId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CustomerId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     ContactInformation = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
                 },
@@ -84,14 +85,13 @@ namespace AviationSalon.Infrastructure.Migrations
                 name: "Weapons",
                 columns: table => new
                 {
-                    WeaponId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    WeaponId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     GuidedSystem = table.Column<int>(type: "integer", nullable: false),
                     Range = table.Column<int>(type: "integer", nullable: false),
                     FirePower = table.Column<int>(type: "integer", nullable: false),
-                    AircraftId = table.Column<int>(type: "integer", nullable: false)
+                    AircraftId = table.Column<string>(type: "character varying(255)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,7 +101,7 @@ namespace AviationSalon.Infrastructure.Migrations
                         column: x => x.AircraftId,
                         principalTable: "Aircrafts",
                         principalColumn: "AircraftId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,10 +214,9 @@ namespace AviationSalon.Infrastructure.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    OrderId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<string>(type: "character varying(255)", nullable: false),
                     TotalQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -236,10 +235,9 @@ namespace AviationSalon.Infrastructure.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    OrderItemId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OrderId = table.Column<int>(type: "integer", nullable: false),
-                    AircraftId = table.Column<int>(type: "integer", nullable: false),
+                    OrderItemId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    OrderId = table.Column<string>(type: "character varying(255)", nullable: false),
+                    AircraftId = table.Column<string>(type: "character varying(255)", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

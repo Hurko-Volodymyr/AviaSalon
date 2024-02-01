@@ -4,7 +4,7 @@ namespace AviationSalon.Core.Data.Entities
 {
     public class AircraftEntity
     {
-        public int AircraftId { get; set; }
+        public string AircraftId { get; set; }
         public string Model { get; set; } = string.Empty;
         public int Range { get; set; } 
         public int MaxHeight { get; set; }

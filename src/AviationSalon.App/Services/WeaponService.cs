@@ -31,7 +31,7 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<WeaponEntity> GetWeaponDetailsAsync(int weaponId)
+        public async Task<WeaponEntity> GetWeaponDetailsAsync(string weaponId)
         {
             try
             {

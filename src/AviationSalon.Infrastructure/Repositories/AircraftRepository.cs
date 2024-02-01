@@ -18,7 +18,7 @@ namespace AviationSalon.Infrastructure.Repositories
             return await _dbContext.Aircrafts.ToListAsync();
         }
 
-        public async Task<AircraftEntity> GetByIdAsync(int id)
+        public async Task<AircraftEntity> GetByIdAsync(string id)
         {
             return await _dbContext.Aircrafts.FindAsync(id);
         }

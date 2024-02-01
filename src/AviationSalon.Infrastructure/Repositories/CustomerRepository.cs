@@ -29,7 +29,7 @@ namespace AviationSalon.Infrastructure.Repositories
             return await _dbContext.Customers.ToListAsync();
         }
 
-        public async Task<CustomerEntity> GetByIdAsync(int id)
+        public async Task<CustomerEntity> GetByIdAsync(string id)
         {
             return await _dbContext.Customers.FindAsync(id);
         }

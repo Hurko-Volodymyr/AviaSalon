@@ -30,30 +30,32 @@ namespace AviationSalon.Tests.Repositories
 
             _orderItem1 = new OrderItemEntity
             {
-                OrderItemId = 1,
-                AircraftId = 1,
+                OrderItemId = "1",
+                AircraftId = "1",
+                OrderId = "1",
                 Quantity = 2,
             };
 
             _orderItem2 = new OrderItemEntity
             {
-                OrderItemId = 2,
-                AircraftId = 2,
+                OrderItemId = "2",
+                AircraftId = "2",
+                OrderId = "1",
                 Quantity = 1,
             };
 
             _existingOrder = new OrderEntity
             {
-                OrderId = 1,
+                OrderId = "1",
                 OrderDate = DateTime.Now,
-                CustomerId = 12,
-                Customer = new CustomerEntity() { CustomerId = 12},
+                CustomerId = "12",
+                Customer = new CustomerEntity() { CustomerId = "12"},
                 OrderItems = new List<OrderItemEntity> { _orderItem1, _orderItem2 },
                 TotalQuantity = _orderItem1.Quantity + _orderItem2.Quantity,
                 Status = OrderStatus.Pending,
             };
 
-            _nonExistingOrderItem = new OrderItemEntity { OrderItemId = -12341 };
+            _nonExistingOrderItem = new OrderItemEntity { OrderItemId = "-12341" };
         }
 
         public void Dispose()
@@ -96,7 +98,7 @@ namespace AviationSalon.Tests.Repositories
             // Arrange
             await _dbContext.OrderItems.AddAsync(_orderItem1);
             await _dbContext.SaveChangesAsync();
-            _orderItem1.OrderId = 10;
+            _orderItem1.OrderId = "10";
 
             // Act
             await _orderItemRepository.UpdateAsync(_orderItem1);
@@ -132,28 +134,39 @@ namespace AviationSalon.Tests.Repositories
             result.Should().BeNull();
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingOrderItem(int nonExistingOrderItemId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingOrderItem()
         {
-            // Arrange
-            _nonExistingOrderItem.OrderItemId = nonExistingOrderItemId;
-
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _orderItemRepository.UpdateAsync(_nonExistingOrderItem));
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingOrder(int nonExistingOrderitemId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForOrderItemWithNullId()
         {
             // Arrange
-            _nonExistingOrderItem.OrderItemId = nonExistingOrderitemId;
+            _nonExistingOrderItem.OrderItemId = null;
 
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _orderItemRepository.UpdateAsync(_nonExistingOrderItem));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingOrderItem()
+        {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _orderItemRepository.DeleteAsync(_nonExistingOrderItem));
         }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForOrderItemWithNullId()
+        {
+            // Arrange
+            _nonExistingOrderItem.OrderItemId = null;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _orderItemRepository.DeleteAsync(_nonExistingOrderItem));
+        }
+
     }
 }

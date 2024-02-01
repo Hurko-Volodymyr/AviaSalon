@@ -13,12 +13,12 @@ namespace AviationSalon.App.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<CustomerEntity> GetCustomerDetailsAsync(int customerId)
+        public async Task<CustomerEntity> GetCustomerDetailsAsync(string customerId)
         {
             return await _customerRepository.GetByIdAsync(customerId);
         }
 
-        public async Task UpdateCustomerDetailsAsync(int customerId, CustomerEntity updatedCustomer)
+        public async Task UpdateCustomerDetailsAsync(string customerId, CustomerEntity updatedCustomer)
         {
             var existingCustomer = await _customerRepository.GetByIdAsync(customerId);
 

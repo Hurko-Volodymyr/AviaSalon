@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AviationSalon.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240131180142_CustomerUpdate")]
-    partial class CustomerUpdate
+    [Migration("20240201204615_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace AviationSalon.Infrastructure.Migrations
 
             modelBuilder.Entity("AviationSalon.Core.Data.Entities.AircraftEntity", b =>
                 {
-                    b.Property<int>("AircraftId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AircraftId"));
+                    b.Property<string>("AircraftId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("ImageFileName")
                         .IsRequired()
@@ -42,7 +40,9 @@ namespace AviationSalon.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("MaxWeaponsCapacity")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -83,11 +83,9 @@ namespace AviationSalon.Infrastructure.Migrations
 
             modelBuilder.Entity("AviationSalon.Core.Data.Entities.OrderEntity", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
@@ -111,17 +109,17 @@ namespace AviationSalon.Infrastructure.Migrations
 
             modelBuilder.Entity("AviationSalon.Core.Data.Entities.OrderItemEntity", b =>
                 {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<string>("OrderItemId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderItemId"));
+                    b.Property<string>("AircraftId")
+                        .IsRequired()
+                        .HasColumnType("character varying(255)");
 
-                    b.Property<int>("AircraftId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
@@ -137,14 +135,12 @@ namespace AviationSalon.Infrastructure.Migrations
 
             modelBuilder.Entity("AviationSalon.Core.Data.Entities.WeaponEntity", b =>
                 {
-                    b.Property<int>("WeaponId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<string>("WeaponId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("WeaponId"));
-
-                    b.Property<int?>("AircraftId")
-                        .HasColumnType("integer");
+                    b.Property<string>("AircraftId")
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("FirePower")
                         .HasColumnType("integer");

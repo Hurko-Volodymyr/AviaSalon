@@ -10,6 +10,7 @@ namespace AviationSalon.Core.Data.Entities.EntityConfigurations
         {
             builder.HasKey(w => w.WeaponId);
 
+            builder.Property(c => c.WeaponId).IsRequired().HasMaxLength(255);
             builder.Property(w => w.Name).IsRequired().HasMaxLength(255);
             builder.Property(w => w.Type).IsRequired();
             builder.Property(w => w.GuidedSystem).IsRequired();

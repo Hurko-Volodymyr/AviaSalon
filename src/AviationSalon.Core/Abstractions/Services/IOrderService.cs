@@ -5,8 +5,8 @@ namespace AviationSalon.Core.Abstractions.Services
     public interface IOrderService
     {
         Task PlaceOrderAsync(OrderEntity order);
-        Task<OrderEntity> GetOrderDetailsAsync(int orderId);
-        Task<List<OrderEntity>> GetCustomerOrdersAsync(int customerId);
+        Task<OrderEntity> GetOrderDetailsAsync(string orderId);
+        Task<List<OrderEntity>> GetCustomerOrdersAsync(string customerId);
     }
 
 

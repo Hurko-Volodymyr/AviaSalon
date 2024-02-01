@@ -2,8 +2,8 @@
 {
     public class UpdateWeaponCountDataModel
     {
-        public int AircraftId { get; set; }
-        public int WeaponId { get; set; }
+        public string AircraftId { get; set; }
+        public string WeaponId { get; set; }
         public int Count { get; set; }
     }
 }

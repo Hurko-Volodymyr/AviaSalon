@@ -4,7 +4,7 @@ namespace AviationSalon.Core.Data.Entities
 {
     public class OrderEntity
     {
-        public int OrderId { get; set; }
+        public string OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public string CustomerId { get; set; }
         public CustomerEntity Customer { get; set; }
