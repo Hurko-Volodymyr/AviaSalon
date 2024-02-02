@@ -17,22 +17,43 @@ namespace AviationSalon.App.Services
             _logger = logger;
         }
 
-        public async Task PlaceOrderAsync(OrderEntity order)
+        public async Task PlaceOrderAsync(List<AircraftEntity> selectedAircraft, string customerId)
         {
             try
             {
-                order.OrderDate = DateTime.UtcNow;
-                order.Status = OrderStatus.Pending;
+                var order = new OrderEntity
+                {
+                    OrderId = Guid.NewGuid().ToString(),
+                    OrderDate = DateTime.UtcNow,
+                    Status = OrderStatus.Pending,
+                    CustomerId = customerId,
+                };
+
+                foreach (var aircraft in selectedAircraft)
+                {
+                    var orderItem = new OrderItemEntity
+                    {
+                        OrderItemId = Guid.NewGuid().ToString(),
+                        AircraftId = aircraft.AircraftId,
+                        Quantity = 1,
+                        OrderId = order.OrderId,
+                    };
+
+                    order.OrderItems.Add(orderItem);
+                }
+
                 await _orderRepository.AddAsync(order);
 
                 _logger.LogInformation($"Order placed successfully. OrderId: {order.OrderId}");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error placing order. OrderId: {order.OrderId}. Error: {ex.Message}");
-                throw; 
+                _logger.LogError($"Error placing order. Error: {ex.Message}");
+                throw;
             }
         }
+
+
 
         public async Task<OrderEntity> GetOrderDetailsAsync(string orderId)
         {

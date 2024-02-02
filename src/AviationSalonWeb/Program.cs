@@ -25,6 +25,7 @@ namespace AviationSalonWeb
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
+
             builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -34,6 +35,11 @@ namespace AviationSalonWeb
                 .AddInMemoryApiResources(IdentityServerConfig.ApiResources)
                 .AddInMemoryClients(IdentityServerConfig.Clients)
                 .AddAspNetIdentity<IdentityUser>();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login"; 
+            });
 
             builder.Services.AddScoped<IRepository<OrderEntity>, OrderRepository>();
             builder.Services.AddScoped<IRepository<OrderItemEntity>, OrderItemRepository>();
@@ -56,7 +62,7 @@ namespace AviationSalonWeb
             var supportedCultures = new[]
             {
                 new CultureInfo("uk-UA"),
-                new CultureInfo("en-GB"),                
+                new CultureInfo("en-GB"),
             };
 
             builder.Services.AddSwaggerGen(c =>
@@ -65,7 +71,6 @@ namespace AviationSalonWeb
             });
 
             var app = builder.Build();
-
 
             using (var scope = app.Services.CreateScope())
             {
@@ -88,7 +93,6 @@ namespace AviationSalonWeb
                 SupportedUICultures = supportedCultures
             });
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
@@ -96,7 +100,6 @@ namespace AviationSalonWeb
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -105,7 +108,6 @@ namespace AviationSalonWeb
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

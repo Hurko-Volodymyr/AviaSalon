@@ -18,16 +18,22 @@ namespace AviationSalon.Infrastructure.Identity
             };
 
         public static IEnumerable<Client> Clients =>
-            new List<Client>
-            {           
-                new Client
-                {
-                ClientId = "client1",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("secret".Sha256()) },
-                AllowedScopes = { "api1" },
-                },
-            };
+    new List<Client>
+    {
+        new Client
+        {
+            ClientId = "aviation_salon_client",
+            ClientName = "Aviation Salon Web Client",
+            AllowedGrantTypes = GrantTypes.Code,
+            RedirectUris = { "https://localhost:7267/home/index" }, 
+            PostLogoutRedirectUris = { "https://localhost:7267/home/index" },
+            ClientSecrets = { new Secret("aviation_salon_secret".Sha256()) },
+            RequireConsent = false,
+            RequirePkce = true,
+            AllowedScopes = { "openid", "profile", "api1" }
+        },
+    };
+
     }
 
 

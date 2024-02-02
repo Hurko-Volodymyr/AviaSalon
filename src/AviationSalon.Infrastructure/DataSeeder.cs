@@ -27,6 +27,41 @@ namespace AviationSalon.Infrastructure
             await _context.SaveChangesAsync();
             _logger.LogInformation("Existing aircrafts removed.");
 
+            if (!_context.Customers.Any())
+            {
+                _logger.LogInformation("Seeding customers...");
+
+                var customers = new List<CustomerEntity>
+            {
+                new CustomerEntity
+                {
+                    CustomerId = "CustomerId1",
+                    Name = "Customer1",
+                    ContactInformation = "Contact1"
+                },
+                new CustomerEntity
+                {
+                    CustomerId = "CustomerId2",
+                    Name = "Customer2",
+                    ContactInformation = "Contact2"
+                }
+            };
+
+                _context.Customers.AddRange(customers);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"Seeded {customers.Count} customers.");
+            }
+            else
+            {
+                _logger.LogInformation("Customers already seeded.");
+            }
+
+            _logger.LogInformation("Removing existing aircrafts...");
+            _context.Aircrafts.RemoveRange(_context.Aircrafts);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Existing aircrafts removed.");
+
             if (!_context.Aircrafts.Any())
             {
                 _logger.LogInformation("Seeding aircrafts...");
