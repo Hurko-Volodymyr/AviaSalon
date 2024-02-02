@@ -1,9 +1,14 @@
-﻿<div class="container text-center">
+﻿@{
+    var orderItemCount = Model.OrderItems.Count;
+}
+
+<div class="container text-center">
     <h1 class="display-4">Your aircrafts:</h1>
 
     <h2 class="mt-4">Selected Aircraft</h2>
-    @foreach (var orderItem in Model.OrderItems)
+    @for (var i = 0; i < orderItemCount; i++)
     {
+        var orderItem = Model.OrderItems[i];
         <p>Aircraft Model: @(orderItem.Aircraft?.Model ?? "N/A")</p>
         <p>Quantity: @orderItem.Quantity</p>
 
@@ -23,7 +28,7 @@
     }
 
     <div class="mt-3">
-        <a class="btn btn-primary" href="/mission/editcart">Edit</a>
-        <a class="btn btn-success" href="/mission/checkout">Proceed to Checkout</a>
+        <a class="btn btn-primary" href="/mission/editcart?orderId=@Model.OrderId">Edit</a>
+        <a class="btn btn-success" href="/mission/checkout?orderId=@Model.OrderId">Proceed to Checkout</a>
     </div>
 </div>

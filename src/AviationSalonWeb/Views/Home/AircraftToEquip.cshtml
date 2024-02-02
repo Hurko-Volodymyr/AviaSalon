@@ -97,13 +97,13 @@
                 function checkMaxWeaponsCapacity(totalWeapons) {
                     if (totalWeapons > maxWeaponsCapacity) {
                         toastr.error('The aircraft has reached the maximum number of weapons.');
-                    }
+                    }                
                 }
 
                 $('#cartButton').click(function () {
                     console.log('Cart button clicked');
 
-                    var selectedAircraftId = '@aircraft.AircraftId'; 
+                    var selectedAircraftId = '@aircraft.AircraftId';
 
                     $.ajax({
                         url: '/mission/createorder',
@@ -111,13 +111,14 @@
                         contentType: 'application/json',
                         data: JSON.stringify({
                             SelectedAircraftId: selectedAircraftId,
-                            CustomerId: 'CustomerId1' // TestId, nedd fix
+                            CustomerId: 'CustomerId1' //Test Id, Need Fix
                         }),
                         success: function (data) {
                             if (data.success) {
                                 console.log('Add to cart success');
                                 toastr.success('Aircraft added to cart successfully!');
-                                window.location.href = '/mission/missiondetails';
+
+                                window.location.href = '/mission/missiondetails?orderId=' + data.orderId;
                             } else {
                                 console.log('Add to cart error', data.message || 'An error occurred while adding aircraft to cart.');
                                 toastr.error(data.message || 'An error occurred while adding aircraft to cart.');
@@ -129,6 +130,7 @@
                         }
                     });
                 });
+
             });
         </script>
     }

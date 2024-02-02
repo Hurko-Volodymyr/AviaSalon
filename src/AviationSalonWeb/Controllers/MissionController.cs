@@ -58,7 +58,8 @@ namespace AviationSalonWeb.Controllers
                 var aircraftIds = new List<string> { missionData.SelectedAircraftId };
                 await _orderService.PlaceOrderAsync(aircraftIds, userId);
 
-                return Json(new { success = true });
+                var orderId = await _orderService.PlaceOrderAsync(aircraftIds, userId);
+                return Json(new { success = true, orderId });
             }
             catch (Exception ex)
             {
@@ -66,17 +67,30 @@ namespace AviationSalonWeb.Controllers
                 return Json(new { success = false, message = "An error occurred while processing mission details." });
             }
         }
-
-
-
         [HttpGet]
         [Route("missiondetails")]
         public async Task<IActionResult> MissionDetails(string orderId)
         {
-            var order =  await _orderService.GetOrderDetailsAsync(orderId);
+            var order = await _orderService.GetOrderDetailsAsync(orderId);
 
             if (order != null)
             {
+                _logger.LogInformation($"Received order with OrderId: {order.OrderId}");
+
+                if (order.OrderItems != null)
+                {
+                    _logger.LogInformation($"Number of OrderItems: {order.OrderItems.Count}");
+
+                    foreach (var orderItem in order.OrderItems)
+                    {
+                        _logger.LogInformation($"OrderItem: AircraftId={orderItem.AircraftId}, Quantity={orderItem.Quantity}");
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation("OrderItems is null");
+                }
+
                 return View(order);
             }
             else
@@ -84,6 +98,11 @@ namespace AviationSalonWeb.Controllers
                 return NotFound();
             }
         }
+
+
+
+
+
     }
 }
 

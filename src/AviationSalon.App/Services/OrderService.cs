@@ -17,7 +17,7 @@ namespace AviationSalon.App.Services
             _logger = logger;
         }
 
-        public async Task PlaceOrderAsync(List<string> aircraftIds, string customerId)
+        public async Task<string> PlaceOrderAsync(List<string> aircraftIds, string customerId)
         {
             try
             {
@@ -27,6 +27,8 @@ namespace AviationSalon.App.Services
                     OrderDate = DateTime.UtcNow,
                     Status = OrderStatus.Pending,
                     CustomerId = customerId,
+                    OrderItems = new List<OrderItemEntity>(),
+                    TotalQuantity = aircraftIds.Count,
                 };
 
                 foreach (var aircraftId in aircraftIds)
@@ -34,9 +36,9 @@ namespace AviationSalon.App.Services
                     var orderItem = new OrderItemEntity
                     {
                         OrderItemId = Guid.NewGuid().ToString(),
-                        AircraftId = aircraftId,
-                        Quantity = 1,
+                        AircraftId = aircraftId,                        
                         OrderId = order.OrderId,
+                        Quantity = 1,
                     };
 
                     order.OrderItems.Add(orderItem);
@@ -44,7 +46,9 @@ namespace AviationSalon.App.Services
 
                 await _orderRepository.AddAsync(order);
 
+                _logger.LogInformation($"Number of OrderItems in the order: {order.OrderItems.Count}");
                 _logger.LogInformation($"Order placed successfully. OrderId: {order.OrderId}");
+                return order.OrderId;
             }
             catch (Exception ex)
             {

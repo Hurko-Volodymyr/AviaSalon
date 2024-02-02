@@ -20,8 +20,11 @@ namespace AviationSalon.Infrastructure.Repositories
 
         public async Task<AircraftEntity> GetByIdAsync(string id)
         {
-            return await _dbContext.Aircrafts.FindAsync(id);
+            return await _dbContext.Aircrafts
+                .Include(a => a.Weapons)
+                .FirstOrDefaultAsync(a => a.AircraftId == id);
         }
+
 
         public async Task AddAsync(AircraftEntity entity)
         {
