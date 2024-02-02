@@ -2,16 +2,24 @@
     <h1 class="display-4">Your aircrafts:</h1>
 
     <h2 class="mt-4">Selected Aircraft</h2>
-    @foreach (var aircraft in Model.Item1)
+    @foreach (var orderItem in Model.OrderItems)
     {
-        <p>Aircraft Model: @aircraft.Model</p>
-    }
+        <p>Aircraft Model: @(orderItem.Aircraft?.Model ?? "N/A")</p>
+        <p>Quantity: @orderItem.Quantity</p>
 
-    <h2 class="mt-4">Selected Weapons</h2>
-    @foreach (var weapon in Model.Item2)
-    {
-        <p>Weapon Name: @weapon.Name</p>
-        <p>Weapon Type: @weapon.Type</p>
+        <h3>Weapons</h3>
+        @if (orderItem.Aircraft != null && orderItem.Aircraft.Weapons.Any())
+        {
+            @foreach (var weapon in orderItem.Aircraft.Weapons)
+            {
+                <p>Weapon Name: @weapon.Name</p>
+                <p>Weapon Type: @weapon.Type</p>
+            }
+        }
+        else
+        {
+            <p>No weapons selected</p>
+        }
     }
 
     <div class="mt-3">

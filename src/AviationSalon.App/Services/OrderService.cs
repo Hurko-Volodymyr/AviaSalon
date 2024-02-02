@@ -17,7 +17,7 @@ namespace AviationSalon.App.Services
             _logger = logger;
         }
 
-        public async Task PlaceOrderAsync(List<AircraftEntity> selectedAircraft, string customerId)
+        public async Task PlaceOrderAsync(List<string> aircraftIds, string customerId)
         {
             try
             {
@@ -29,12 +29,12 @@ namespace AviationSalon.App.Services
                     CustomerId = customerId,
                 };
 
-                foreach (var aircraft in selectedAircraft)
+                foreach (var aircraftId in aircraftIds)
                 {
                     var orderItem = new OrderItemEntity
                     {
                         OrderItemId = Guid.NewGuid().ToString(),
-                        AircraftId = aircraft.AircraftId,
+                        AircraftId = aircraftId,
                         Quantity = 1,
                         OrderId = order.OrderId,
                     };
@@ -52,6 +52,7 @@ namespace AviationSalon.App.Services
                 throw;
             }
         }
+
 
 
 

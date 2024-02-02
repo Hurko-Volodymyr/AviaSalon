@@ -103,22 +103,21 @@
                 $('#cartButton').click(function () {
                     console.log('Cart button clicked');
 
-                    var selectedAircraft = [{ AircraftId: '@aircraft.AircraftId' }];
-                    var selectedWeapons = [];
+                    var selectedAircraftId = '@aircraft.AircraftId'; 
 
                     $.ajax({
-                        url: '/mission/missiondetails',
+                        url: '/mission/createorder',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
-                            SelectedAircraft: selectedAircraft,
-                            SelectedWeapons: selectedWeapons
+                            SelectedAircraftId: selectedAircraftId,
+                            CustomerId: 'CustomerId1' // TestId, nedd fix
                         }),
                         success: function (data) {
                             if (data.success) {
                                 console.log('Add to cart success');
                                 toastr.success('Aircraft added to cart successfully!');
-                                window.location.href = '/missiondetails';
+                                window.location.href = '/mission/missiondetails';
                             } else {
                                 console.log('Add to cart error', data.message || 'An error occurred while adding aircraft to cart.');
                                 toastr.error(data.message || 'An error occurred while adding aircraft to cart.');

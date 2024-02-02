@@ -6,6 +6,7 @@ using AviationSalon.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace AviationSalonWeb.Controllers
@@ -35,29 +36,27 @@ namespace AviationSalonWeb.Controllers
         }
 
         [HttpPost]
-        [Route("missiondetails")]
-        public async Task<IActionResult> MissionDetails([FromBody] MissionDataModel missionData)
+        [Route("createorder")]
+        public async Task<IActionResult> CreateOrder([FromBody] MissionDataModel missionData)
         {
             try
             {
-                var userId = "CustomerId1";
+                var userId = missionData.CustomerId;
 
                 if (string.IsNullOrEmpty(userId))
                 {
                     return Json(new { success = false, message = "User not authenticated." });
                 }
 
-                if (missionData.SelectedAircraft.Any())
+                if (!string.IsNullOrEmpty(missionData.SelectedAircraftId))
                 {
-                    _logger.LogInformation($"Selected Aircraft Count: {missionData.SelectedAircraft.Count}");
+                    _logger.LogInformation($"Selected Aircraft Id: {missionData.SelectedAircraftId}");
                 }
 
-                if (missionData.SelectedWeapons.Any())
-                {
-                    _logger.LogInformation($"Selected Weapons Count: {missionData.SelectedWeapons.Count}");
-                }
+                _logger.LogInformation($"Before PlaceOrderAsync - Selected Aircraft Id: {missionData.SelectedAircraftId}");
 
-                await _orderService.PlaceOrderAsync(missionData.SelectedAircraft, userId);
+                var aircraftIds = new List<string> { missionData.SelectedAircraftId };
+                await _orderService.PlaceOrderAsync(aircraftIds, userId);
 
                 return Json(new { success = true });
             }
@@ -70,43 +69,21 @@ namespace AviationSalonWeb.Controllers
 
 
 
-        [HttpPost("CreateOrder")]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderModel orderModel)
+        [HttpGet]
+        [Route("missiondetails")]
+        public async Task<IActionResult> MissionDetails(string orderId)
         {
-            if (orderModel == null || orderModel.OrderItems == null || !orderModel.OrderItems.Any())
+            var order =  await _orderService.GetOrderDetailsAsync(orderId);
+
+            if (order != null)
             {
-                return BadRequest("Invalid order data.");
+                return View(order);
             }
-
-            var customerId = _httpContextAccessor.HttpContext.User.FindFirst("sub")?.Value;
-
-            if (customerId == null)
+            else
             {
-                return BadRequest("Unable to retrieve customer id.");
+                return NotFound();
             }
-
-            var order = new OrderEntity
-            {
-                OrderId = Guid.NewGuid().ToString(),
-                OrderDate = DateTime.UtcNow,
-                CustomerId = customerId,
-                TotalQuantity = orderModel.OrderItems.Sum(item => item.Quantity),
-            };
-
-            foreach (var orderItemDto in orderModel.OrderItems)
-            {
-                var orderItem = new OrderItemEntity
-                {
-                    OrderItemId = Guid.NewGuid().ToString(),
-                };
-
-                order.OrderItems.Add(orderItem);
-            }
-
-          //  await _orderService.PlaceOrderAsync(order);
-
-            return Ok(order);
-        }        
+        }
     }
 }
 
