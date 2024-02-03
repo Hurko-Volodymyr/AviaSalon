@@ -1,3 +1,4 @@
+using AviationSalon.App.Services;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Core.Data.Enums;
@@ -16,9 +17,10 @@ namespace AviationSalonWeb.Controllers
     public class MissionController : Controller
     {
         private readonly ILogger<MissionController> _logger;
-        private readonly IAircraftCatalogService _aircraftCatalogService;
+        private readonly IAircraftCatalogService _aircraftService;
         private readonly IWeaponService _weaponService;
         private readonly IOrderService _orderService;
+        private readonly IOrderItemService _orderItemService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MissionController(
@@ -26,12 +28,14 @@ namespace AviationSalonWeb.Controllers
             IAircraftCatalogService aircraftCatalogService,
             IWeaponService weaponCatalogService,
             IOrderService orderService,
+            IOrderItemService orderItemService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
-            _aircraftCatalogService = aircraftCatalogService;
+            _aircraftService = aircraftCatalogService;
             _weaponService = weaponCatalogService;
             _orderService = orderService;
+            _orderItemService = orderItemService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -67,37 +71,55 @@ namespace AviationSalonWeb.Controllers
                 return Json(new { success = false, message = "An error occurred while processing mission details." });
             }
         }
+
         [HttpGet]
         [Route("missiondetails")]
         public async Task<IActionResult> MissionDetails(string orderId)
         {
-            var order = await _orderService.GetOrderDetailsAsync(orderId);
-
-            if (order != null)
+            try
             {
-                _logger.LogInformation($"Received order with OrderId: {order.OrderId}");
+                var orderItems = await _orderItemService.GetOrderItemsByOrderIdAsync(orderId);
 
-                if (order.OrderItems != null)
+                if (orderItems != null && orderItems.Count != 0)
                 {
-                    _logger.LogInformation($"Number of OrderItems: {order.OrderItems.Count}");
+                    _logger.LogInformation($"Received order items for OrderId: {orderId}");
 
-                    foreach (var orderItem in order.OrderItems)
+                    var aircraftModels = new List<AircraftViewModel>();
+
+                    foreach (var orderItem in orderItems)
                     {
-                        _logger.LogInformation($"OrderItem: AircraftId={orderItem.AircraftId}, Quantity={orderItem.Quantity}");
+                        var aircraft = await _aircraftService.GetAircraftDetailsAsync(orderItem.AircraftId);
+
+                        _logger.LogInformation($"Received aircraft with weapon counts: {aircraft?.Weapons.Count}");
+                        var aircraftModel = new AircraftViewModel
+                        {
+                            Model = aircraft?.Model ?? "N/A",
+                            Quantity = orderItem.Quantity,
+                            Weapons = aircraft?.Weapons ?? new List<WeaponEntity>()
+                        };
+
+                        aircraftModels.Add(aircraftModel);
                     }
+
+                    ViewBag.OrderId = orderId;
+
+                    return View(aircraftModels);
                 }
                 else
                 {
-                    _logger.LogInformation("OrderItems is null");
+                    _logger.LogInformation($"No order items found for OrderId: {orderId}");
+                    return NotFound();
                 }
-
-                return View(order);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError($"Error getting order items. OrderId: {orderId}. Error: {ex.Message}");
+                return StatusCode(500);
             }
         }
+
+
+
 
 
 

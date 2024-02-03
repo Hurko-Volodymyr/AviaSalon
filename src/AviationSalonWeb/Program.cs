@@ -49,6 +49,7 @@ namespace AviationSalonWeb
             builder.Services.AddScoped<DataSeeder>();
 
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderItemService, OrderItemService>();
             builder.Services.AddScoped<IAircraftCatalogService, AircraftCatalogService>();
             builder.Services.AddScoped<IWeaponService, WeaponService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();

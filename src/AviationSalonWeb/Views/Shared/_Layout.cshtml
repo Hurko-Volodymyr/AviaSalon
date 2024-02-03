@@ -1,6 +1,10 @@
-﻿<!DOCTYPE html>
-
+﻿@{
     @inject IStringLocalizer<Views_Home_Index> Localizer
+
+}
+
+<!DOCTYPE html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,7 +39,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Mission" asp-action="Index">Missions</a></li>
                 </ul>
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -70,8 +74,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script src="~/js/site.js"></script>
-
-    <!-- AJAX script for language change -->
     <script>
         function changeLanguage(culture) {
             $.ajax({
@@ -98,5 +100,4 @@
     </script>
 
     @RenderSection("scripts", required: false)
-</body>
-</html>
+  </body>

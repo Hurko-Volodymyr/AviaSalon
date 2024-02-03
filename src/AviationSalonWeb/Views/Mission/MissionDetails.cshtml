@@ -1,34 +1,45 @@
-﻿@{
-    var orderItemCount = Model.OrderItems.Count;
-}
+﻿@using AviationSalon.WebUI.Models
+@model List<AircraftViewModel>
 
 <div class="container text-center">
-    <h1 class="display-4">Your aircrafts:</h1>
+    <h1 class="display-4">Your Aircrafts:</h1>
 
-    <h2 class="mt-4">Selected Aircraft</h2>
-    @for (var i = 0; i < orderItemCount; i++)
-    {
-        var orderItem = Model.OrderItems[i];
-        <p>Aircraft Model: @(orderItem.Aircraft?.Model ?? "N/A")</p>
-        <p>Quantity: @orderItem.Quantity</p>
+    <div class="row mt-4">
+        @foreach (var aircraftModel in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card mx-auto">
+                    <div class="card-body">
+                        <h2 class="card-title">Aircraft Model:</h2>
+                        <h2 class="card-title">@aircraftModel.Model</h2>
 
-        <h3>Weapons</h3>
-        @if (orderItem.Aircraft != null && orderItem.Aircraft.Weapons.Any())
-        {
-            @foreach (var weapon in orderItem.Aircraft.Weapons)
-            {
-                <p>Weapon Name: @weapon.Name</p>
-                <p>Weapon Type: @weapon.Type</p>
-            }
+                        <h3 class="mt-3">Weapons</h3>
+                        @if (aircraftModel.Weapons != null && aircraftModel.Weapons.Any())
+                        {
+                            <ul>
+                                @foreach (var weapon in aircraftModel.Weapons)
+                                {
+                                    <li>
+                                        <p>Weapon Name: @weapon.Name</p>
+                                        <p>Weapon Type: @weapon.Type</p>
+                                    </li>
+                                }
+                            </ul>
+
+                            <p>Total Weapons Quantity: @aircraftModel.Weapons.Count</p>
+                        }
+                        else
+                        {
+                            <p>No weapons selected</p>
+                        }
+                    </div>
+                </div>
+            </div>
         }
-        else
-        {
-            <p>No weapons selected</p>
-        }
-    }
+    </div>
 
     <div class="mt-3">
-        <a class="btn btn-primary" href="/mission/editcart?orderId=@Model.OrderId">Edit</a>
-        <a class="btn btn-success" href="/mission/checkout?orderId=@Model.OrderId">Proceed to Checkout</a>
+        <a class="btn btn-primary" href="@Url.Action("EditOrder", "Mission")">Edit</a>
+        <a class="btn btn-success" href="@Url.Action("Checkout", "Mission", new { orderId = ViewBag.OrderId })">Proceed to Checkout</a>
     </div>
 </div>

@@ -17,6 +17,7 @@ namespace AviationSalon.Tests.Repositories
         private OrderItemEntity _nonExistingOrderItem;
         private OrderItemEntity _orderItem1;
         private OrderItemEntity _orderItem2;
+        private AircraftEntity _aircraft;
 
         public OrderItemRepositoryTests()
         {
@@ -27,6 +28,19 @@ namespace AviationSalon.Tests.Repositories
             _dbContext = new ApplicationDbContext(_dbContextOptions);
 
             _orderItemRepository = new OrderItemRepository(_dbContext);
+
+            _aircraft = new AircraftEntity
+            {
+                AircraftId = "1",
+                Model = "TestModel",
+                Range = 1000,
+                MaxHeight = 50000,
+                Role = Role.Fighter,
+                ImageFileName = "test_image.jpg",
+                MaxWeaponsCapacity = 5,
+                Weapons = new List<WeaponEntity> { new WeaponEntity {  WeaponId = "1", Name = "Weapon"} }
+
+            };
 
             _orderItem1 = new OrderItemEntity
             {
@@ -49,7 +63,7 @@ namespace AviationSalon.Tests.Repositories
                 OrderId = "1",
                 OrderDate = DateTime.Now,
                 CustomerId = "12",
-                Customer = new CustomerEntity() { CustomerId = "12"},
+                Customer = new CustomerEntity() { CustomerId = "12", Name = "Customer", ContactInformation = "CI"},
                 OrderItems = new List<OrderItemEntity> { _orderItem1, _orderItem2 },
                 TotalQuantity = _orderItem1.Quantity + _orderItem2.Quantity,
                 Status = OrderStatus.Pending,
@@ -80,6 +94,8 @@ namespace AviationSalon.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnCorrectOrderItem()
         {
             // Arrange
+            await _dbContext.Aircrafts.AddAsync(_aircraft);
+            await _dbContext.Orders.AddAsync(_existingOrder);
             await _dbContext.OrderItems.AddAsync(_orderItem1);
             await _dbContext.SaveChangesAsync();
 
@@ -90,7 +106,9 @@ namespace AviationSalon.Tests.Repositories
             result.Should().NotBeNull();
             result.AircraftId.Should().Be(_orderItem1.AircraftId);
             result.Quantity.Should().Be(_orderItem1.Quantity);
+            result.OrderItemId.Should().Be(_orderItem1.OrderItemId);
         }
+
 
         [Fact]
         public async Task UpdateAsync_ShouldUpdateOrderItem()

@@ -29,7 +29,16 @@
 
         <button class="btn btn-primary mt-3" id="backButton">Back to Aircraft Details</button>
         <button class="btn btn-info mt-3" id="cartButton">Submit and go to the mission details</button>
-    </div>
+
+        <h2 class="mt-4">Or add to the existing order</h2>
+        <form id="addToExistingOrderForm">
+            <div class="form-group">
+                <label for="orderIdInput">Order ID:</label>
+                <input type="text" class="form-control" id="orderIdInput" name="orderIdInput" required>
+            </div>
+            <button type="submit" class="btn btn-success">Add to Existing Order</button>
+        </form>
+    </div>    
 
     @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -129,6 +138,42 @@
                             toastr.error('Error occurred while adding aircraft to cart.');
                         }
                     });
+                });
+
+
+                $('#addToExistingOrderForm').submit(function (e) {
+                    e.preventDefault();
+                    var orderId = $('#orderIdInput').val();
+
+                    if (/^[a-zA-Z0-9]+$/.test(orderId)) {
+                        $.ajax({
+                            url: '/mission/editorder',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                SelectedAircraftId: '@aircraft.AircraftId',
+                                OrderId: orderId
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    console.log('Add to existing order success');
+                                    toastr.success('Aircraft added to existing order successfully!');
+
+                                    
+                                    window.location.href = '/mission/missiondetails?orderId=' + orderId;
+                                } else {
+                                    console.log('Add to existing order error', data.message || 'An error occurred while adding aircraft to the existing order.');
+                                    toastr.error(data.message || 'An error occurred while adding aircraft to the existing order.');
+                                }
+                            },
+                            error: function (error) {
+                                console.log('Add to existing order error', error);
+                                toastr.error('Error occurred while adding aircraft to the existing order.');
+                            }
+                        });
+                    } else {
+                        toastr.error('Invalid order ID. Please enter a valid order ID containing only letters and numbers.');
+                    }
                 });
 
             });
