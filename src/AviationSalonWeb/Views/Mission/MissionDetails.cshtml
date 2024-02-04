@@ -39,7 +39,7 @@
     </div>
 
     <div class="mt-3">
-        <a class="btn btn-primary" href="@Url.Action("EditOrder", "Mission")">Edit</a>
-        <a class="btn btn-success" href="@Url.Action("Checkout", "Mission", new { orderId = ViewBag.OrderId })">Proceed to Checkout</a>
+        <a class="btn btn-danger" href="@Url.Action("DeleteOrder", "Mission", new { orderId = ViewBag.OrderId })">Cancel</a>
+        <a class="btn btn-success" href="/mission/checkoutconfirmation?orderId=@ViewBag.OrderId">Proceed to Checkout</a>
     </div>
 </div>

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using static AviationSalon.Core.Abstractions.Services.ICustomerService;
 
 namespace AviationSalonWeb.Controllers
 {
@@ -21,6 +22,7 @@ namespace AviationSalonWeb.Controllers
         private readonly IWeaponService _weaponService;
         private readonly IOrderService _orderService;
         private readonly IOrderItemService _orderItemService;
+        private readonly ICustomerService _customerService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public MissionController(
@@ -29,6 +31,7 @@ namespace AviationSalonWeb.Controllers
             IWeaponService weaponCatalogService,
             IOrderService orderService,
             IOrderItemService orderItemService,
+            ICustomerService customerService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
@@ -37,6 +40,7 @@ namespace AviationSalonWeb.Controllers
             _orderService = orderService;
             _orderItemService = orderItemService;
             _httpContextAccessor = httpContextAccessor;
+            _customerService = customerService;
         }
 
         [HttpPost]
@@ -148,14 +152,67 @@ namespace AviationSalonWeb.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("deleteorder")]
+        public async Task<IActionResult> DeleteOrder(string orderId)
+        {
+            try
+            {
+                var success = await _orderService.DeleteOrderAsync(orderId);
 
+                if (success)
+                {
+                    _logger.LogInformation("Order canceled successfully!");
+                }
 
+                else
+                {
+                    _logger.LogWarning("Failed to cancel order.");                
+                }
 
+                return RedirectToAction("Index", "Home");
 
+            }
+            catch (Exception ex)
+            {                
+                _logger.LogWarning($"An error occurred while canceling the order: {ex.Message}.");
+                return RedirectToAction("Index", "Home");
+            }
+        }
 
+        [HttpPost]
+        [Route("checkout")]
+        public async Task<IActionResult> Checkout(CustomerInfoModel customerModel, string orderId)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                   
+                    await _customerService.UpdateCustomerDetailsAsync(customerModel.UserSecret, customerModel.Name, customerModel.ContactInformation);
+                    var result = await _customerService.AddOrderToCustomerAsync(customerModel.UserSecret, orderId);
+                    if (result)
+                    {
+                        _logger.LogInformation($"Order was added to customer succesfull");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Order was not added to customer");
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error occurred during checkout. Exception: {ex.Message}");
+                    TempData["ErrorMessage"] = "Error occurred during checkout.";
+                }
+            }
 
+            return View(customerModel);
+        }
 
     }
 }
+
 
 

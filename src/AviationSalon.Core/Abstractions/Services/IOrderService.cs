@@ -8,6 +8,7 @@ namespace AviationSalon.Core.Abstractions.Services
         Task<bool> EditOrderAsync(string orderId, string selectedAircraftId);
         Task<OrderEntity> GetOrderDetailsAsync(string orderId);
         Task<List<OrderEntity>> GetCustomerOrdersAsync(string customerId);
+        Task<bool> DeleteOrderAsync(string orderId);
     }
 
 

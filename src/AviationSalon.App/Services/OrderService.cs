@@ -159,6 +159,31 @@ namespace AviationSalon.App.Services
                 throw;
             }
         }
+        public async Task<bool> DeleteOrderAsync(string orderId)
+        {
+            try
+            {
+                var order = await _orderRepository.GetByIdAsync(orderId);
+
+                if (order != null)
+                {
+                  
+                    await _orderRepository.DeleteAsync(order);
+
+                    _logger.LogInformation($"Order with ID {orderId} canceled successfully.");
+
+                    return true;
+                }
+
+                _logger.LogWarning($"Order with ID {orderId} not found.");
+                return false; 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while canceling the order with ID {orderId}. Exception: {ex.Message}");
+                return false;
+            }
+        }
     }
 
 }
