@@ -25,12 +25,12 @@ namespace AviationSalon.Tests.Services
             _aircraftService = new AircraftCatalogService(_aircraftRepositoryMock.Object, _weaponRepositoryMock.Object, _loggerMock.Object);
             _weapon = new WeaponEntity()
             {
-                    WeaponId = "1",
-                    Name = "TestWeapon1",
-                    Type = WeaponType.AirToAir,
-                    GuidedSystem = GuidedSystemType.Infrared,
-                    Range = 1000,
-                    FirePower = 50                
+                WeaponId = "1",
+                Name = "TestWeapon1",
+                Type = WeaponType.AirToAir,
+                GuidedSystem = GuidedSystemType.Infrared,
+                Range = 1000,
+                FirePower = 50
             };
 
             _secondWeapon = new WeaponEntity()
@@ -43,7 +43,7 @@ namespace AviationSalon.Tests.Services
                 FirePower = 50
             };
 
-            _aircraftEntity = new AircraftEntity ()
+            _aircraftEntity = new AircraftEntity()
             {
                 AircraftId = "1",
                 Model = "Model123",

@@ -13,11 +13,48 @@ namespace AviationSalon.App.Services
     public class OrderItemService : IOrderItemService
     {
         private readonly IRepository<OrderItemEntity> _orderItemRepository;
+        private readonly IRepository<AircraftEntity> _aircraftRepository;
         private readonly ILogger<OrderItemService> _logger;
-        public OrderItemService(IRepository<OrderItemEntity> orderItemRepository, ILogger<OrderItemService> logger)
+        public OrderItemService(IRepository<OrderItemEntity> orderItemRepository, IRepository<AircraftEntity> aircraftRepository, ILogger<OrderItemService> logger)
         {
             _orderItemRepository = orderItemRepository;
+            _aircraftRepository = aircraftRepository;
             _logger = logger;
+        }
+
+
+        public async Task<bool> CreateOrderItemAsync(string orderId, string aircraftId)
+        {
+            try
+            {
+                var aircraft = await _aircraftRepository.GetByIdAsync(aircraftId);
+
+                if (aircraft == null)
+                {
+                    _logger.LogWarning($"Aircraft not found with ID: {aircraftId}");
+                    return false;
+                }
+
+                var newOrderItem = new OrderItemEntity
+                {
+                    OrderItemId = Guid.NewGuid().ToString(),
+                    AircraftId = aircraftId,
+                    Aircraft = aircraft,
+                    Quantity = 1,
+                    OrderId = orderId,
+                };
+
+                await _orderItemRepository.AddAsync(newOrderItem);
+
+                _logger.LogInformation($"Order item created successfully with ID: {newOrderItem.OrderItemId}");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while creating order item. Exception: {ex.Message}");
+                return false;
+            }
         }
         public async Task<List<OrderItemEntity>> GetOrderItemsByOrderIdAsync(string orderId)
         {

@@ -38,7 +38,7 @@ namespace AviationSalonWeb
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/Login"; 
+                options.LoginPath = "/Account/Login";
             });
 
             builder.Services.AddScoped<IRepository<OrderEntity>, OrderRepository>();

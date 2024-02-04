@@ -20,7 +20,7 @@ namespace AviationSalon.Infrastructure.Repositories
         public async Task<WeaponEntity> GetByIdAsync(string id)
         {
             return await _dbContext.Weapons
-                .Include(w => w.Aircraft) 
+                .Include(w => w.Aircraft)
                 .FirstOrDefaultAsync(w => w.WeaponId == id);
         }
 

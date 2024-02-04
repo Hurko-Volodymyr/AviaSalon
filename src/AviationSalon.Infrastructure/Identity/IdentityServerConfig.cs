@@ -25,7 +25,7 @@ namespace AviationSalon.Infrastructure.Identity
             ClientId = "aviation_salon_client",
             ClientName = "Aviation Salon Web Client",
             AllowedGrantTypes = GrantTypes.Code,
-            RedirectUris = { "https://localhost:7267/home/index" }, 
+            RedirectUris = { "https://localhost:7267/home/index" },
             PostLogoutRedirectUris = { "https://localhost:7267/home/index" },
             ClientSecrets = { new Secret("aviation_salon_secret".Sha256()) },
             RequireConsent = false,

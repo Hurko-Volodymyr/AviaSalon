@@ -33,9 +33,9 @@ namespace AviationSalon.Infrastructure.Repositories
         {
             return await _dbContext.OrderItems
                 .Include(oi => oi.Order)
-                    .ThenInclude(o => o.Customer) 
+                    .ThenInclude(o => o.Customer)
                 .Include(oi => oi.Aircraft)
-                    .ThenInclude(a => a.Weapons) 
+                    .ThenInclude(a => a.Weapons)
                 .FirstOrDefaultAsync(oi => oi.OrderItemId == id);
         }
 

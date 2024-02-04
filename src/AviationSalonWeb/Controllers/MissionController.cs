@@ -116,6 +116,36 @@ namespace AviationSalonWeb.Controllers
                 _logger.LogError($"Error getting order items. OrderId: {orderId}. Error: {ex.Message}");
                 return StatusCode(500);
             }
+        }        
+
+        [HttpPost]
+        [Route("editorder")]
+        public async Task<IActionResult> EditOrder([FromBody] EditOrderModel model)
+        {
+            try
+            {
+                _logger.LogInformation($"Editing order with ID: {model.OrderId}, adding aircraft with ID: {model.SelectedAircraftId}");
+
+                
+
+                var success = await _orderService.EditOrderAsync(model.OrderId, model.SelectedAircraftId);
+
+                if (success)
+                {
+                    _logger.LogInformation($"Order updated successfully");
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    _logger.LogWarning($"Failed to update order.");
+                    return Json(new { success = false, message = "Failed to update order." });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while updating order. Exception: {ex.Message}");
+                return Json(new { success = false, message = "Error occurred while updating order.", error = ex.Message });
+            }
         }
 
 

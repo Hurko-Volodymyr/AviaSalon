@@ -113,7 +113,7 @@ namespace AviationSalon.Infrastructure
                     },
 
                     new AircraftEntity
-                    {                        
+                    {
                         AircraftId = Guid.NewGuid().ToString(),
                         Model = "F-16",
                         Range = 4220000,

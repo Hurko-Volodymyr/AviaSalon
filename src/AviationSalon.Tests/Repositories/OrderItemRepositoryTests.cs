@@ -38,7 +38,7 @@ namespace AviationSalon.Tests.Repositories
                 Role = Role.Fighter,
                 ImageFileName = "test_image.jpg",
                 MaxWeaponsCapacity = 5,
-                Weapons = new List<WeaponEntity> { new WeaponEntity {  WeaponId = "1", Name = "Weapon"} }
+                Weapons = new List<WeaponEntity> { new WeaponEntity { WeaponId = "1", Name = "Weapon" } }
 
             };
 
@@ -63,7 +63,7 @@ namespace AviationSalon.Tests.Repositories
                 OrderId = "1",
                 OrderDate = DateTime.Now,
                 CustomerId = "12",
-                Customer = new CustomerEntity() { CustomerId = "12", Name = "Customer", ContactInformation = "CI"},
+                Customer = new CustomerEntity() { CustomerId = "12", Name = "Customer", ContactInformation = "CI" },
                 OrderItems = new List<OrderItemEntity> { _orderItem1, _orderItem2 },
                 TotalQuantity = _orderItem1.Quantity + _orderItem2.Quantity,
                 Status = OrderStatus.Pending,

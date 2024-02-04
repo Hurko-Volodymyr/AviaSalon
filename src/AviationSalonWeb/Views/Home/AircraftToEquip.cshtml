@@ -145,7 +145,7 @@
                     e.preventDefault();
                     var orderId = $('#orderIdInput').val();
 
-                    if (/^[a-zA-Z0-9]+$/.test(orderId)) {
+                    if (/^[a-zA-Z0-9-]+$/.test(orderId)) {
                         $.ajax({
                             url: '/mission/editorder',
                             type: 'POST',
@@ -172,7 +172,7 @@
                             }
                         });
                     } else {
-                        toastr.error('Invalid order ID. Please enter a valid order ID containing only letters and numbers.');
+                        toastr.error('Invalid order ID. Please enter a valid order ID.');
                     }
                 });
 

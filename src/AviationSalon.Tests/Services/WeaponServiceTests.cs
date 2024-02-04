@@ -38,7 +38,7 @@ namespace AviationSalon.Tests.Services
         {
             // Arrange
             _weaponRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(new List<WeaponEntity>
-            {         
+            {
                 _weapon,
                 _anotherWeapon,
             });

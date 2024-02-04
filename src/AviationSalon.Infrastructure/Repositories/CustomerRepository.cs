@@ -32,7 +32,7 @@ namespace AviationSalon.Infrastructure.Repositories
         public async Task<CustomerEntity> GetByIdAsync(string id)
         {
             return await _dbContext.Customers
-                .Include(c => c.Orders) 
+                .Include(c => c.Orders)
                     .ThenInclude(o => o.OrderItems)
                 .FirstOrDefaultAsync(c => c.CustomerId == id);
         }

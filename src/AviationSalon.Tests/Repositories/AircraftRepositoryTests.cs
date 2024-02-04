@@ -34,7 +34,7 @@ namespace AviationSalon.Tests.Repositories
             Role = Core.Data.Enums.Role.Fighter,
             Range = 10,
             MaxHeight = 100,
-            MaxWeaponsCapacity = 2,            
+            MaxWeaponsCapacity = 2,
         };
 
         private AircraftEntity _nonExistingAircraft { get; set; } = new AircraftEntity
@@ -124,7 +124,7 @@ namespace AviationSalon.Tests.Repositories
 
         [Fact]
         public async Task UpdateAsync_ShouldThrowExceptionForNonExistingAircraft()
-        {            
+        {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _aircraftRepository.UpdateAsync(_nonExistingAircraft));
         }

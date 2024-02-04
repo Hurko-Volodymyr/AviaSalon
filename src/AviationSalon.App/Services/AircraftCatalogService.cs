@@ -82,7 +82,7 @@ namespace AviationSalon.App.Services
 
                 aircraft.Weapons.Add(weapon);
                 await _aircraftRepository.UpdateAsync(aircraft);
-              
+
                 _logger.LogInformation($"Aircraft now has {aircraft.Weapons.Count} weapons.");
             }
             catch (Exception ex)

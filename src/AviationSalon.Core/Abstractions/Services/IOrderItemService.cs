@@ -9,6 +9,7 @@ namespace AviationSalon.Core.Abstractions.Services
 {
     public interface IOrderItemService
     {
+        Task<bool> CreateOrderItemAsync(string orderId, string aircraftId);
         Task<List<OrderItemEntity>> GetOrderItemsByOrderIdAsync(string orderId);
     }
 }
