@@ -219,6 +219,64 @@ namespace AviationSalonWeb.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Route("orderhistory")]
+        public async Task<IActionResult> OrderHistory(string customerId)
+        {
+            _logger.LogInformation($"Go to orders with customerId: {customerId}");
+            var orders = await _orderService.GetCustomerOrdersAsync(customerId);
+            if (orders == null)
+                _logger.LogWarning($"Any order was not added to customer yet");
+
+            return View(orders);
+        }
+
+        [HttpGet]
+        [Route("orderhistorydetails")]
+        public async Task<IActionResult> OrderHistoryDetails(string orderId, string customerId)
+        {
+            try
+            {
+                var orderItems = await _orderItemService.GetOrderItemsByOrderIdAsync(orderId);
+
+                if (orderItems != null && orderItems.Count != 0)
+                {
+                    _logger.LogInformation($"Received order items for OrderId: {orderId}");
+
+                    var aircraftModels = new List<AircraftViewModel>();
+
+                    foreach (var orderItem in orderItems)
+                    {
+                        var aircraft = await _aircraftService.GetAircraftDetailsAsync(orderItem.AircraftId);
+
+                        _logger.LogInformation($"Received aircraft with weapon counts: {aircraft?.Weapons.Count}");
+                        var aircraftModel = new AircraftViewModel
+                        {
+                            Model = aircraft?.Model ?? "N/A",
+                            Quantity = orderItem.Quantity,
+                            Weapons = aircraft?.Weapons ?? new List<WeaponEntity>()
+                        };
+
+                        aircraftModels.Add(aircraftModel);
+                    }
+
+                    ViewBag.OrderId = orderId;
+                    ViewBag.CustomerId = customerId;
+
+                    return View(aircraftModels);
+                }
+                else
+                {
+                    _logger.LogInformation($"No order items found for OrderId: {orderId}");
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting order items. OrderId: {orderId}. Error: {ex.Message}");
+                return StatusCode(500);
+            }
+        }
 
 
     }

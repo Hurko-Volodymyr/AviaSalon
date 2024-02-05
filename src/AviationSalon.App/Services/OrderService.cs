@@ -147,7 +147,10 @@ namespace AviationSalon.App.Services
             try
             {
                 var allOrders = await _orderRepository.GetAllAsync();
-                var customerOrders = allOrders.Where(order => order.CustomerId == customerId).ToList();
+                var customerOrders = allOrders
+                    .Where(order => order.CustomerId == customerId)
+                    .OrderByDescending(order => order.OrderDate)
+                    .ToList();
 
                 _logger.LogInformation($"Retrieved {customerOrders.Count} orders for customer. CustomerId: {customerId}");
 
@@ -159,6 +162,7 @@ namespace AviationSalon.App.Services
                 throw;
             }
         }
+
         public async Task<bool> DeleteOrderAsync(string orderId)
         {
             try

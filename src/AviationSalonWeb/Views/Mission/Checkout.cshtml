@@ -45,7 +45,8 @@
                         contentType: false,
                         success: function (data) {
                             console.log(data);
-                            window.location.href = '/missions/orderhistory';
+                            var userSecret = $("#UserSecret").val();
+                            window.location.href = '/Mission/orderhistory?customerId=' + userSecret;
                         },
                         error: function (error) {
                             console.error("Error:", error);
