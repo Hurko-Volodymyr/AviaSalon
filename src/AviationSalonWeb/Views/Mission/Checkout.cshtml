@@ -3,24 +3,59 @@
 
 <h1>Checkout</h1>
 
-<form asp-action="Checkout" method="post">
+<form id="checkoutForm" asp-action="Checkout" asp-route-orderId="@ViewBag.OrderId" method="post">
+    @Html.AntiForgeryToken()
+
     <div class="form-group">
         <label asp-for="Name">Name:</label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" class="form-control" required />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="ContactInformation">Contact Information:</label>
-        <input asp-for="ContactInformation" class="form-control" />
+        <input asp-for="ContactInformation" class="form-control" required />
         <span asp-validation-for="ContactInformation" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="UserSecret">User Secret:</label>
-        <input asp-for="UserSecret" class="form-control" />
+        <input asp-for="UserSecret" class="form-control" required />
         <span asp-validation-for="UserSecret" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <input type="hidden" id="orderId" name="orderId" value="@ViewBag.OrderId" />
+
+    <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
 </form>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#submitBtn").on("click", function () {
+                if ($("#checkoutForm")[0].checkValidity()) {
+                    var formData = new FormData($("#checkoutForm")[0]);
+
+                    $.ajax({
+                        url: "/mission/checkout?orderId=@ViewBag.OrderId",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data);
+                            window.location.href = '/missions/orderhistory';
+                        },
+                        error: function (error) {
+                            console.error("Error:", error);
+                            alert("An error occurred during checkout.");
+                        }
+                    });
+                } else {
+                    alert("Please fill in all required fields.");
+                }
+            });
+        });
+    </script>
+}

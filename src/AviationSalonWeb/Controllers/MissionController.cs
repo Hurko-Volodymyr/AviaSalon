@@ -180,26 +180,34 @@ namespace AviationSalonWeb.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("checkout")]
+        public async Task<IActionResult> Checkout(string orderId)
+        {
+            ViewBag.OrderId = orderId;
+            _logger.LogInformation($"Go to checkout with order: {orderId}");
+            return View();
+        }
+
         [HttpPost]
         [Route("checkout")]
-        public async Task<IActionResult> Checkout(CustomerInfoModel customerModel, string orderId)
+        public async Task<IActionResult> Checkout([FromForm] CustomerInfoModel customerModel, string orderId)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                   
                     await _customerService.UpdateCustomerDetailsAsync(customerModel.UserSecret, customerModel.Name, customerModel.ContactInformation);
                     var result = await _customerService.AddOrderToCustomerAsync(customerModel.UserSecret, orderId);
+
                     if (result)
                     {
-                        _logger.LogInformation($"Order was added to customer succesfull");
+                        _logger.LogInformation($"Order was added to customer successfully");
                     }
                     else
                     {
                         _logger.LogWarning($"Order was not added to customer");
                     }
-                    
                 }
                 catch (Exception ex)
                 {
@@ -208,8 +216,10 @@ namespace AviationSalonWeb.Controllers
                 }
             }
 
-            return View(customerModel);
+            return View();
         }
+
+
 
     }
 }
