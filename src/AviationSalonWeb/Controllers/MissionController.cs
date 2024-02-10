@@ -14,7 +14,9 @@ using static AviationSalon.Core.Abstractions.Services.ICustomerService;
 namespace AviationSalonWeb.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
+
     public class MissionController : Controller
     {
         private readonly ILogger<MissionController> _logger;
@@ -132,7 +134,7 @@ namespace AviationSalonWeb.Controllers
 
                 
 
-                var success = await _orderService.EditOrderAsync(model.OrderId, model.SelectedAircraftId);
+                var success = await _orderService.TryEditOrderAsync(model.OrderId, model.SelectedAircraftId);
 
                 if (success)
                 {
@@ -158,7 +160,7 @@ namespace AviationSalonWeb.Controllers
         {
             try
             {
-                var success = await _orderService.DeleteOrderAsync(orderId);
+                var success = await _orderService.TryDeleteOrderAsync(orderId);
 
                 if (success)
                 {
@@ -176,7 +178,7 @@ namespace AviationSalonWeb.Controllers
             catch (Exception ex)
             {                
                 _logger.LogWarning($"An error occurred while canceling the order: {ex.Message}.");
-                return RedirectToAction("Index", "Home");
+                return RedirectToRoute(new { controller = "Home", action = "Index" });
             }
         }
 
@@ -186,8 +188,9 @@ namespace AviationSalonWeb.Controllers
         {
             ViewBag.OrderId = orderId;
             _logger.LogInformation($"Go to checkout with order: {orderId}");
-            return View();
+            return await Task.FromResult(View());
         }
+
 
         [HttpPost]
         [Route("checkout")]
@@ -198,7 +201,7 @@ namespace AviationSalonWeb.Controllers
                 try
                 {
                     await _customerService.UpdateCustomerDetailsAsync(customerModel.UserSecret, customerModel.Name, customerModel.ContactInformation);
-                    var result = await _customerService.AddOrderToCustomerAsync(customerModel.UserSecret, orderId);
+                    var result = await _customerService.TryAddOrderToCustomerAsync(customerModel.UserSecret, orderId);
 
                     if (result)
                     {

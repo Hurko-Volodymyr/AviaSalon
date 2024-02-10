@@ -59,7 +59,7 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<bool> EditOrderAsync(string orderId, string selectedAircraftId)
+        public async Task<bool> TryEditOrderAsync(string orderId, string selectedAircraftId)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<bool> DeleteOrderAsync(string orderId)
+        public async Task<bool> TryDeleteOrderAsync(string orderId)
         {
             try
             {

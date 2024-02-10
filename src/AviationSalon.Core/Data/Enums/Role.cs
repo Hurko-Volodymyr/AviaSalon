@@ -7,5 +7,6 @@
         Multirole,
         Interceptor,
         CloseAirSupport,
+        Trainer,
     }
 }

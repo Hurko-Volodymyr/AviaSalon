@@ -60,7 +60,7 @@
 
                     if (newCount >= 0 && totalWeaponsCount + (newCount - currentCount) <= maxWeaponsCapacity) {
                         $.ajax({
-                            url: '/home/updateweaponcount',
+                            url: '/updateweaponcount',
                             type: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify({
@@ -92,7 +92,7 @@
 
                 $('#backButton').click(function () {
                     console.log('Back button clicked');
-                    window.location.href = '/home/aircraftdetails/' + '@aircraft.AircraftId';
+                    window.location.href = '/aircraftdetails/' + '@aircraft.AircraftId';
                 });
 
                 function getTotalWeaponsCount() {

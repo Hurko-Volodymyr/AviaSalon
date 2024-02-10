@@ -2,6 +2,7 @@ using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.WebUI.Models;
 using AviationSalonWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -11,7 +12,7 @@ using System.Globalization;
 namespace AviationSalonWeb.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    //[Route("[controller]")]    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -32,7 +33,8 @@ namespace AviationSalonWeb.Controllers
         }
 
         [HttpGet]
-        [Route("index")]
+        //[Route("index")]
+        [Route("/")]
         public async Task<IActionResult> Index()
         {
             var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
@@ -45,6 +47,7 @@ namespace AviationSalonWeb.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [Route("changelanguage")]
         public IActionResult ChangeLanguage(string culture)
         {
@@ -69,6 +72,7 @@ namespace AviationSalonWeb.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("aircraftdetails/{id}")]
         public async Task<IActionResult> AircraftDetails(string id)
         {
@@ -77,6 +81,7 @@ namespace AviationSalonWeb.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("toequip/{id}")]
         public async Task<IActionResult> AircraftToEquip(string id)
         {
@@ -89,6 +94,7 @@ namespace AviationSalonWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("updateweaponcount")]
         public async Task<IActionResult> UpdateWeaponCount([FromBody] UpdateWeaponCountDataModel data)
         {
@@ -115,6 +121,7 @@ namespace AviationSalonWeb.Controllers
 
 
         [HttpGet]
+        [Authorize]
         [Route("privacy")]
         public IActionResult Privacy()
         {

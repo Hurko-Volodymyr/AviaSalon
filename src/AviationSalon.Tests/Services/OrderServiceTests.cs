@@ -117,7 +117,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync(new AircraftEntity());
 
             // Act
-            var result = await _orderService.EditOrderAsync(_order.OrderId, _aircraft.AircraftId);
+            var result = await _orderService.TryEditOrderAsync(_order.OrderId, _aircraft.AircraftId);
 
             // Assert
             result.Should().BeTrue();
@@ -135,7 +135,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync((OrderEntity)null);
 
             // Act
-            var result = await _orderService.EditOrderAsync(nonExistentOrderId, _aircraft.AircraftId);
+            var result = await _orderService.TryEditOrderAsync(nonExistentOrderId, _aircraft.AircraftId);
 
             // Assert
             result.Should().BeFalse();
@@ -217,7 +217,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync(_order);
 
             // Act
-            var result = await _orderService.DeleteOrderAsync(_order.OrderId);
+            var result = await _orderService.TryDeleteOrderAsync(_order.OrderId);
 
             // Assert
             result.Should().BeTrue();
@@ -234,7 +234,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync((OrderEntity)null);
 
             // Act
-            var result = await _orderService.DeleteOrderAsync(nonExistentOrderId);
+            var result = await _orderService.TryDeleteOrderAsync(nonExistentOrderId);
 
             // Assert
             result.Should().BeFalse();

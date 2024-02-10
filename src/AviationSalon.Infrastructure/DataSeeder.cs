@@ -1,5 +1,6 @@
 ﻿using AviationSalon.Core.Data.Entities;
 using AviationSalon.Core.Data.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -9,11 +10,13 @@ namespace AviationSalon.Infrastructure
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<DataSeeder> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public DataSeeder(ApplicationDbContext context, ILogger<DataSeeder> logger)
+        public DataSeeder(ApplicationDbContext context, ILogger<DataSeeder> logger, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public async Task SeedDataAsync()
@@ -121,6 +124,17 @@ namespace AviationSalon.Infrastructure
                         Role = Role.Multirole,
                         MaxWeaponsCapacity = 8,
                         ImageFileName = "aircrafts/f-16.jpg"
+                    },                  
+                    
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "L-39",
+                        Range = 900,
+                        MaxHeight = 11000,
+                        Role = Role.Trainer,
+                        MaxWeaponsCapacity = 3, 
+                        ImageFileName = "aircrafts/l-39.jpg"
                     },
 
                     new AircraftEntity
@@ -131,7 +145,7 @@ namespace AviationSalon.Infrastructure
                         MaxHeight = 18013,
                         Role = Role.Fighter,
                         MaxWeaponsCapacity = 6,
-                        ImageFileName = "aircrafts/mig-29.jpg"
+                        ImageFileName = "aircrafts/mig-29-1.jpg"
                     },
 
                     new AircraftEntity
@@ -142,7 +156,7 @@ namespace AviationSalon.Infrastructure
                         MaxHeight = 20000,
                         Role = Role.Fighter,
                         MaxWeaponsCapacity = 8,
-                        ImageFileName = "aircrafts/su-27.jpg"
+                        ImageFileName = "aircrafts/su-27-1.jpg"
                     },
 
                     new AircraftEntity
@@ -153,7 +167,7 @@ namespace AviationSalon.Infrastructure
                         MaxHeight = 11000,
                         Role = Role.Bomber,
                         MaxWeaponsCapacity = 12,
-                        ImageFileName = "aircrafts/su-24.jpg"
+                        ImageFileName = "aircrafts/su-24-1.jpg"
                     },
 
                     new AircraftEntity
@@ -164,7 +178,7 @@ namespace AviationSalon.Infrastructure
                         MaxHeight = 5000,
                         Role = Role.CloseAirSupport,
                         MaxWeaponsCapacity = 10,
-                        ImageFileName = "aircrafts/su-25.jpg"
+                        ImageFileName = "aircrafts/su-25-1.jpg"
                     },
 
                     new AircraftEntity
@@ -175,7 +189,18 @@ namespace AviationSalon.Infrastructure
                         MaxHeight = 15240,
                         Role = Role.Multirole,
                         MaxWeaponsCapacity = 8,
-                        ImageFileName = "aircrafts/f-16.jpg"
+                        ImageFileName = "aircrafts/f-16-1.jpg"
+                    },
+
+                    new AircraftEntity
+                    {
+                        AircraftId = Guid.NewGuid().ToString(),
+                        Model = "L-39",
+                        Range = 900,
+                        MaxHeight = 11000,
+                        Role = Role.Trainer,
+                        MaxWeaponsCapacity = 3,
+                        ImageFileName = "aircrafts/l-39-1.jpg"
                     },
                 };
 
@@ -272,6 +297,33 @@ namespace AviationSalon.Infrastructure
             }
 
             _logger.LogInformation("Data seeding completed.");
+        }
+
+        public async Task InitializeUsersAsync()
+        {
+            if (!await _context.Users.AnyAsync())
+            {
+                _logger.LogInformation("Seeding users...");
+
+                var user = new IdentityUser { UserName = "Customer1@gmail.com" };
+                var result = await _userManager.CreateAsync(user, "P@ssw0rd123");
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created successfully.");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        _logger.LogError($"Error creating user: {error.Description}");
+                    }
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Users already seeded.");
+            }
         }
     }
 }

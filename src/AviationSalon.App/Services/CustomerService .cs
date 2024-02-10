@@ -37,7 +37,7 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<bool> AddOrderToCustomerAsync(string userSecret, string orderId)
+        public async Task<bool> TryAddOrderToCustomerAsync(string userSecret, string orderId)
         {
             try
             {

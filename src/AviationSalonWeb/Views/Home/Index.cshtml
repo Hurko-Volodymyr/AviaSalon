@@ -3,7 +3,7 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<HomeController> Localizer
 @{
-    ViewData["WelcomeMessage"] = Localizer["Welcome to Aviation Shop"];
+    ViewData["WelcomeMessage"] = Localizer["Welcome to Aviation Salon"];
     ViewData["ExploreMessage"] = Localizer["Explore our collection of aviation products."];
     ViewData["SelectAircraft"] = Localizer["Select an Aircraft for the Mission"];
 
@@ -44,7 +44,7 @@
         $(document).ready(function () {
             $('.view-details-btn').on('click', function () {
                 var aircraftId = $(this).data('id');
-                var url = '/home/aircraftdetails/' + aircraftId;
+                var url = '/aircraftdetails/' + aircraftId;
 
                 $.ajax({
                     url: url,
@@ -63,11 +63,11 @@
                 console.log('Equip button clicked for aircraft ID: ' + aircraftId);
 
                 $.ajax({
-                    url: '/home/toequip/' + aircraftId,
+                    url: '/toequip/' + aircraftId,
                     type: 'GET',
                     success: function (data) {
                         console.log('Equip success');
-                        window.location.href = '/home/toequip/' + aircraftId;
+                        window.location.href = '/toequip/' + aircraftId;
                     },
                     error: function (error) {
                         console.log('Equip error', error);

@@ -23,7 +23,7 @@ namespace AviationSalon.App.Services
         }
 
 
-        public async Task<bool> CreateOrderItemAsync(string orderId, string aircraftId)
+        public async Task<bool> TryCreateOrderItemAsync(string orderId, string aircraftId)
         {
             try
             {

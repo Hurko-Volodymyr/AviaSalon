@@ -117,7 +117,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync(order);
 
             // Act
-            var result = await _customerService.AddOrderToCustomerAsync(_customer.CustomerId, orderId);
+            var result = await _customerService.TryAddOrderToCustomerAsync(_customer.CustomerId, orderId);
 
             // Assert
             result.Should().BeTrue();
@@ -135,7 +135,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync((CustomerEntity)null);
 
             // Act
-            var result = await _customerService.AddOrderToCustomerAsync(userSecret, orderId);
+            var result = await _customerService.TryAddOrderToCustomerAsync(userSecret, orderId);
 
             // Assert
             result.Should().BeFalse();
@@ -153,7 +153,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync((OrderEntity)null);
 
             // Act
-            var result = await _customerService.AddOrderToCustomerAsync(_customer.CustomerId, orderId);
+            var result = await _customerService.TryAddOrderToCustomerAsync(_customer.CustomerId, orderId);
 
             // Assert
             result.Should().BeFalse();

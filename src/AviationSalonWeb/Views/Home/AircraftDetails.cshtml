@@ -24,18 +24,18 @@
             var aircraftId = '@Model.AircraftId'; 
             $('#backButton').click(function () {
                 console.log('Back button clicked');
-                window.location.href = '/home/index';
+                window.location.href = '/';
             });
 
             $('#equipButton').click(function () {
                 console.log('Equip button clicked');
 
                 $.ajax({
-                    url: '/home/toequip/' + aircraftId,
+                    url: '/toequip/' + aircraftId,
                     type: 'GET',
                     success: function (data) {
                         console.log('Equip success');
-                        window.location.href = '/home/toequip/' + aircraftId;
+                        window.location.href = '/toequip/' + aircraftId;
                     },
                     error: function (error) {
                         console.log('Equip error', error);

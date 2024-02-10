@@ -64,7 +64,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync(_aircraft);
 
             // Act
-            var result = await _orderItemService.CreateOrderItemAsync(_order.OrderId, _aircraft.AircraftId);
+            var result = await _orderItemService.TryCreateOrderItemAsync(_order.OrderId, _aircraft.AircraftId);
 
             // Assert
             result.Should().BeTrue();
@@ -80,7 +80,7 @@ namespace AviationSalon.Tests.Services
                 .ReturnsAsync((AircraftEntity)null);
 
             // Act
-            var result = await _orderItemService.CreateOrderItemAsync(_order.OrderId, nonExistentAircraftId);
+            var result = await _orderItemService.TryCreateOrderItemAsync(_order.OrderId, nonExistentAircraftId);
 
             // Assert
             result.Should().BeFalse();
