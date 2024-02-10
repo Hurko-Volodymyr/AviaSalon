@@ -38,7 +38,7 @@ namespace AviationSalon.Infrastructure
             {
                 new CustomerEntity
                 {
-                    CustomerId = "CustomerId1",
+                    CustomerId = "Customer1@gmail.com",
                     Name = "Customer1",
                     ContactInformation = "Contact1"
                 },

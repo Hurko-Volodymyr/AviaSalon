@@ -3,6 +3,7 @@ using AviationSalon.Core.Data.Entities;
 using AviationSalon.WebUI.Models;
 using AviationSalonWeb.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -19,17 +20,20 @@ namespace AviationSalonWeb.Controllers
         private readonly IAircraftCatalogService _aircraftCatalogService;
         private readonly IWeaponService _weaponService;
         private readonly IStringLocalizer<HomeController> _localizer;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public HomeController(
             ILogger<HomeController> logger,
             IAircraftCatalogService aircraftCatalogService,
             IWeaponService weaponCatalogService,
-            IStringLocalizer<HomeController> localizer)
+            IStringLocalizer<HomeController> localizer,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _aircraftCatalogService = aircraftCatalogService;
             _weaponService = weaponCatalogService;
             _localizer = localizer;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -87,7 +91,9 @@ namespace AviationSalonWeb.Controllers
         {
             var aircraftDetails = await _aircraftCatalogService.GetAircraftDetailsAsync(id);
             var weaponsList = await _weaponService.GetWeaponsListAsync();
-
+            var currentUser = _httpContextAccessor.HttpContext.User.Identity.Name;
+            _logger.LogInformation($"Select aircraft with id: {id} and user with id = {currentUser}");
+            ViewBag.CustomerId = currentUser;
             var equipData = new Tuple<AircraftEntity, List<WeaponEntity>>(aircraftDetails, weaponsList);
 
             return View(equipData);

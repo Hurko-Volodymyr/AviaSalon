@@ -39,11 +39,10 @@
     </div>
 
     <div class="mt-3">
-        <form method="post" action="@Url.Action("DeleteOrder", "Mission")" style="display: inline;">
-            <input type="hidden" name="orderId" value="@ViewBag.OrderId" />
+        <form class="d-inline" method="post" action="@Url.Action("DeleteOrder", "Mission", new { orderId = ViewBag.OrderId })">
             <button type="submit" class="btn btn-danger">Cancel</button>
         </form>
-        <a class="btn btn-success" href="/mission/checkout?orderId=@ViewBag.OrderId">Proceed to Checkout</a>
+        <a class="btn btn-success ml-2" href="/mission/checkout?orderId=@ViewBag.OrderId">Proceed to Checkout</a>
     </div>
-
 </div>
+

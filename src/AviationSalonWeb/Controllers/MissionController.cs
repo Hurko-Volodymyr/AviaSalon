@@ -172,7 +172,7 @@ namespace AviationSalonWeb.Controllers
                     _logger.LogWarning("Failed to cancel order.");                
                 }
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToRoute(new { controller = "Home", action = "Index" });
 
             }
             catch (Exception ex)

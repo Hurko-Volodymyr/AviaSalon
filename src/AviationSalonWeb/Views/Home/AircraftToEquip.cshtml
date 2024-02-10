@@ -113,14 +113,14 @@
                     console.log('Cart button clicked');
 
                     var selectedAircraftId = '@aircraft.AircraftId';
-
+                    var customerId = '@ViewBag.CustomerId'; 
                     $.ajax({
                         url: '/mission/createorder',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
                             SelectedAircraftId: selectedAircraftId,
-                            CustomerId: 'CustomerId1' //Test Id, Need Fix
+                            CustomerId: customerId
                         }),
                         success: function (data) {
                             if (data.success) {
@@ -139,7 +139,6 @@
                         }
                     });
                 });
-
 
                 $('#addToExistingOrderForm').submit(function (e) {
                     e.preventDefault();

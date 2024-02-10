@@ -61,6 +61,7 @@ namespace AviationSalonWeb
             builder.Services.AddLogging();
 
             builder.Services.AddControllersWithViews().AddViewLocalization();
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddRazorPages();
             var supportedCultures = new[]
