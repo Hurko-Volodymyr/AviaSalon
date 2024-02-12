@@ -1,23 +1,17 @@
-﻿@using AviationSalon.Core.Data.Entities
-@using AviationSalonWeb.Controllers
-@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<HomeController> Localizer
-@{
-    ViewData["WelcomeMessage"] = Localizer["Welcome to Aviation Salon"];
-    ViewData["ExploreMessage"] = Localizer["Explore our collection of aviation products."];
-    ViewData["SelectAircraft"] = Localizer["Select an Aircraft for the Mission"];
+﻿@{
 
+    @model List<AircraftEntity>
     var aircraftList = ViewData["AircraftList"] as List<AircraftEntity>;
 }
-@model List<AircraftEntity>
+
 
 <div class="container">
-    <h1 class="display-4 text-center">@ViewData["WelcomeMessage"]</h1>
-    <p class="text-center">@ViewData["ExploreMessage"]</p>
+    <h1 class="display-4 text-center">@Localizer["WelcomeMessage"]</h1>
+    <p class="text-center">@Localizer["ExploreMessage"]</p>
 
     <div class="row mb-4">
         <div class="col-md-12">
-            <h2 class="text-center">@ViewData["SelectAircraft"]</h2>
+            <h2 class="text-center">@Localizer["SelectAircraft"]</h2>
         </div>
         @foreach (var aircraft in aircraftList)
         {
@@ -27,10 +21,10 @@
                     <div class="card-body">
                         <h5 class="card-title">@aircraft.Model</h5>
                         <p class="card-text">@Localizer["Role"]: @aircraft.Role</p>
-                        <p class="card-text">@Localizer["Max Weapons Capacity"]: @aircraft.MaxWeaponsCapacity</p>
+                        <p class="card-text">@Localizer["MaxWeaponsCapacity"]: @aircraft.MaxWeaponsCapacity</p>
 
-                        <button class="btn btn-primary view-details-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["View Details"]</button>
-                        <button class="btn btn-success equip-aircraft-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["Equip Aircraft"]</button>
+                        <button class="btn btn-primary view-details-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["ViewDetails"]</button>
+                        <button class="btn btn-success equip-aircraft-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["EquipAircraft"]</button>
                     </div>
                 </div>
             </div>

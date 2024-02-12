@@ -3,7 +3,6 @@ using AviationSalon.Core.Data.Entities;
 using AviationSalon.WebUI.Models;
 using AviationSalonWeb.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -12,8 +11,7 @@ using System.Globalization;
 
 namespace AviationSalonWeb.Controllers
 {
-    [ApiController]
-    //[Route("[controller]")]    
+    [ApiController]  
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -37,14 +35,11 @@ namespace AviationSalonWeb.Controllers
         }
 
         [HttpGet]
-        //[Route("index")]
         [Route("/")]
         public async Task<IActionResult> Index()
         {
             var aircraftList = await _aircraftCatalogService.GetAircraftListAsync();
             ViewData["AircraftList"] = aircraftList;
-
-            ViewData["Title"] = _localizer["Title"];
 
             return View();
         }

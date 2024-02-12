@@ -1,15 +1,8 @@
-using AviationSalon.App.Services;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
-using AviationSalon.Core.Data.Enums;
-using AviationSalon.Infrastructure;
 using AviationSalon.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Security.Claims;
-using static AviationSalon.Core.Abstractions.Services.ICustomerService;
 
 namespace AviationSalonWeb.Controllers
 {

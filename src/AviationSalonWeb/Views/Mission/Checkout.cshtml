@@ -1,33 +1,33 @@
-﻿@using AviationSalon.WebUI.Models
-@model CustomerInfoModel
+﻿@model CustomerInfoModel
 
-<h1>Checkout</h1>
+<h1>@Localizer["Checkout"]</h1>
 
 <form id="checkoutForm" asp-action="Checkout" asp-route-orderId="@ViewBag.OrderId" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label asp-for="Name">Name:</label>
+        <label asp-for="Name">@Localizer["Name"]:</label>
         <input asp-for="Name" class="form-control" required />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="ContactInformation">Contact Information:</label>
+        <label asp-for="ContactInformation">@Localizer["Contact Information"]:</label>
         <input asp-for="ContactInformation" class="form-control" required />
         <span asp-validation-for="ContactInformation" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="UserSecret">User Secret:</label>
+        <label asp-for="UserSecret">@Localizer["Repeat your login"]:</label>
         <input asp-for="UserSecret" class="form-control" required />
         <span asp-validation-for="UserSecret" class="text-danger"></span>
     </div>
 
     <input type="hidden" id="orderId" name="orderId" value="@ViewBag.OrderId" />
 
-    <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+    <button type="button" id="submitBtn" class="btn btn-primary">@Localizer["Submit"]</button>
 </form>
+
 
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

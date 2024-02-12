@@ -228,6 +228,36 @@ namespace AviationSalon.Infrastructure
                     new WeaponEntity
                     {
                         WeaponId = Guid.NewGuid().ToString(),
+                        Name = "Central Fuel Tank",
+                        Type = WeaponType.AirToGround,
+                        GuidedSystem = GuidedSystemType.None,
+                        Range = 0, 
+                        FirePower = 200 
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "Wing Fuel Tank",
+                        Type = WeaponType.AirToGround,
+                        GuidedSystem = GuidedSystemType.None,
+                        Range = 0, 
+                        FirePower = 150 
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
+                        Name = "Conformal Fuel Tank",
+                        Type = WeaponType.AirToGround,
+                        GuidedSystem = GuidedSystemType.None,
+                        Range = 0,
+                        FirePower = 100
+                    },
+
+                    new WeaponEntity
+                    {
+                        WeaponId = Guid.NewGuid().ToString(),
                         Name = "AIM-120 AMRAAM",
                         Type = WeaponType.AirToAir,
                         GuidedSystem = GuidedSystemType.ActiveRadar,

@@ -8,16 +8,16 @@
     <div class="container text-center">
         <img src="~/images/@aircraft.ImageFileName" class="img-fluid" alt="Aircraft Image">
         <h3 class="display-4">@aircraft.Model</h3>
-        <h3 class="display-4">Max weapon capacity: @aircraft.MaxWeaponsCapacity</h3>
+        <h3 class="display-4">@Localizer["Max Weapons Capacity"]: @aircraft.MaxWeaponsCapacity</h3>
 
         <h2 class="mt-4">Weapon Information</h2>
 
         @foreach (var weapon in weapons)
         {
             <div class="weapon-info" data-id="@weapon.WeaponId">
-                <p>Weapon Name: @weapon.Name</p>
-                <p>Weapon Type: @weapon.Type</p>
-                <p>Weapon Range: @weapon.Range meters</p>
+                <p>@Localizer["Weapon Name"]: @weapon.Name</p>
+                <p>@Localizer["Weapon Type"]: @weapon.Type</p>
+                <p>@Localizer["Weapon Range"]: @weapon.Range @Localizer["meters"]</p>
                 <div class="mt-3">
                     <button class="btn btn-danger minusButton" data-id="@weapon.WeaponId">-</button>
                     <span class="weaponCount" data-id="@weapon.WeaponId">0</span>
@@ -27,16 +27,16 @@
             </div>
         }
 
-        <button class="btn btn-primary mt-3" id="backButton">Back to Aircraft Details</button>
-        <button class="btn btn-info mt-3" id="cartButton">Submit and go to the mission details</button>
+        <button class="btn btn-primary mt-3" id="backButton">@Localizer["Back to Aircraft Details"]</button>
+        <button class="btn btn-info mt-3" id="cartButton">@Localizer["Submit and go to the mission details"]</button>
 
-        <h2 class="mt-4">Or add to the existing order</h2>
+        <h2 class="mt-4">@Localizer["Or add to the existing order"]</h2>
         <form id="addToExistingOrderForm">
             <div class="form-group">
                 <label for="orderIdInput">Order ID:</label>
                 <input type="text" class="form-control" id="orderIdInput" name="orderIdInput" required>
             </div>
-            <button type="submit" class="btn btn-success">Add to Existing Order</button>
+            <button type="submit" class="btn btn-success">@Localizer["Add to Existing Order"]</button>
         </form>
     </div>    
 
@@ -181,5 +181,5 @@
 }
 else
 {
-    <p>Aircraft not found</p>
+    <p>@Localizer["Aircraft not found"]</p>
 }

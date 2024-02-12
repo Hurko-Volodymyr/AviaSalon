@@ -1,6 +1,4 @@
-﻿using AviationSalon.Core.Data.Entities;
-
-namespace AviationSalon.WebUI.Models
+﻿namespace AviationSalon.WebUI.Models
 {
     public class MissionDataModel
     {

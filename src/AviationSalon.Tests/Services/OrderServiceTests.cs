@@ -1,6 +1,5 @@
 ﻿using AviationSalon.App.Services;
 using AviationSalon.Core.Abstractions.Repositories;
-using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
 using AviationSalon.Core.Data.Enums;
 using FluentAssertions;

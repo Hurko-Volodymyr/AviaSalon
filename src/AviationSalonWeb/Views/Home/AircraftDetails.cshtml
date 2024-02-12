@@ -1,4 +1,5 @@
-﻿@section scripts {
+﻿@section scripts
+{
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 }
 
@@ -7,13 +8,13 @@
     <div class="container text-center">
         <img src="~/images/@Model.ImageFileName" class="img-fluid" alt="Aircraft Image">
         <h1 class="display-4">@Model.Model</h1>
-        <p>Role: @Model.Role.ToString()</p>
-        <p>Max Weapons Capacity: @Model.MaxWeaponsCapacity</p>
-        <p>Range: @Model.Range meters</p>
-        <p>Max Height: @Model.MaxHeight meters</p>
+        <p>@Localizer["Role"]: @Model.Role.ToString()</p>
+        <p>@Localizer["Max Weapons Capacity"]: @Model.MaxWeaponsCapacity</p>
+        <p>@Localizer["Range"]: @Model.Range @Localizer["meters"]</p>
+        <p>@Localizer["Max Height"]: @Model.MaxHeight @Localizer["meters"]</p>
 
-        <button class="btn btn-primary mx-auto" id="backButton">Back to Aircraft List</button>
-        <button class="btn btn-success mx-auto" id="equipButton">Equip Aircraft</button>
+        <button class="btn btn-primary mx-auto" id="backButton">@Localizer["Back to Aircraft List"]</button>
+        <button class="btn btn-success mx-auto" id="equipButton">@Localizer["Equip Aircraft"]</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -47,5 +48,5 @@
 }
 else
 {
-    <p>Aircraft not found</p>
+    <p>@Localizer["Aircraft not found"]</p>
 }

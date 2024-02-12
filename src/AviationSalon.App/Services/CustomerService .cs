@@ -1,7 +1,6 @@
 ﻿using AviationSalon.Core.Abstractions.Repositories;
 using AviationSalon.Core.Abstractions.Services;
 using AviationSalon.Core.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AviationSalon.App.Services

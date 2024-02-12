@@ -8,8 +8,6 @@ using AviationSalon.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Globalization;
 
@@ -60,14 +58,16 @@ namespace AviationSalonWeb
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddLogging();
 
-            builder.Services.AddControllersWithViews().AddViewLocalization();
+            builder.Services.AddControllersWithViews()
+                .AddDataAnnotationsLocalization()
+                .AddViewLocalization();
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddRazorPages();
             var supportedCultures = new[]
             {
-                new CultureInfo("uk-UA"),
-                new CultureInfo("en-GB"),
+                new CultureInfo("uk"),
+                new CultureInfo("en"),
             };
 
             builder.Services.AddSwaggerGen(c =>
@@ -94,7 +94,7 @@ namespace AviationSalonWeb
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("uk-UA"),
+                DefaultRequestCulture = new RequestCulture("uk"),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });

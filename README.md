@@ -1,36 +1,41 @@
-# AviaSalon
- This is my view on the AviaStore. Tris project is about request close air support. 
+AviaSalon: This is my view on the Aviation Salon. My contacts: https://github.com/Hurko-Volodymyr/ or pzkpmfv@gmail.com
+
+This project is about request close air support.
 
 Welcome to the Aviation Salon, your premier platform for purchasing military aircraft, spare parts, fuel, and related accessories.
 
-## Main Features
+Main Features:
 
-- **User Authentication and Authorization:**
-  - Secure registration and login for users.
-  - Role-based access control for administrators and buyers.
+1. **User Authentication and Authorization:**
+   - [+] Secure login for users.
+   - [-] Role-based access control for administrators and customers.
+2. **Aircraft Marketplace:**
+   - [+] Browse a diverse selection of military aircraft.
+   - [+] View detailed specifications, images, and equipment.
+3. **Spare Parts Store:**
+   - [+] Find and purchase genuine spare parts for various aircraft models.
+   - [-] (I understood that don't need this)
+4. **Fuel and Propellant Ordering:**
+   - [+] Place orders for high-quality aviation fuel and propellants. 
+   - [-] (only fuel tanks, but propellants are useless here)
+5. **BKC (Bombs, Missiles, and Cartridges) Store:**
+   - [+] Explore and choose a range of military-grade weaponry.
+6. **Order Management:**
+   - [+] Track and manage your orders seamlessly.
+   - [-] Receive notifications on order status updates.
+7. **Some additional moments:**
+   - [+] Localizations
+   - [+] Docker
+   - [+] Tests for all methods with FluentAssertions (positive & negative)
+   - [+] Swagger
+   - [+] Logging for all methods
+   - [+] CI for github
+   - [+] AJAX
+   - [+] Validations
+   - [+] Identity Server
+   - [-] Authentication and Authorization by Google
 
-- **Aircraft Marketplace:**
-  - Browse a diverse selection of military aircraft.
-  - View detailed specifications, images, and equipment.
-
-- **Spare Parts Store:**
-  - Find and purchase genuine spare parts for various aircraft models.
-
-- **Fuel and Propellant Ordering:**
-  - Place orders for high-quality aviation fuel and propellants.
-
-- **BKC (Bombs, Missiles, and Cartridges) Store:**
-  - Explore and choose a range of military-grade weaponry.
-
-- **Order Management:**
-  - Track and manage your orders seamlessly.
-  - Receive notifications on order status updates.
-
-- **Reporting and Analytics:**
-  - Gain insights into your purchasing history and trends.
-  - Generate reports for accounting and analysis.
-
-## Use-Cases
+## Use-Cases (old for memories)
 
 1. **User Registration and Login:**
    - Users can register with their credentials.

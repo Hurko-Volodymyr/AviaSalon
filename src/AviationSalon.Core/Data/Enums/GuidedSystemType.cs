@@ -6,5 +6,6 @@
         Laser,
         ActiveRadar,
         PassiveRadar,
+        None,
     }
 }
