@@ -17,10 +17,13 @@ namespace AviationSalon.Infrastructure.Repositories
             return await _dbContext.Weapons.ToListAsync();
         }
 
-        public async Task<WeaponEntity> GetByIdAsync(int id)
+        public async Task<WeaponEntity> GetByIdAsync(string id)
         {
-            return await _dbContext.Weapons.FindAsync(id);
+            return await _dbContext.Weapons
+                .Include(w => w.Aircraft)
+                .FirstOrDefaultAsync(w => w.WeaponId == id);
         }
+
 
         public async Task AddAsync(WeaponEntity entity)
         {

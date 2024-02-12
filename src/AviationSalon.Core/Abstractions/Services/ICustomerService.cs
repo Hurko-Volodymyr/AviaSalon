@@ -4,11 +4,9 @@ namespace AviationSalon.Core.Abstractions.Services
 {
     public interface ICustomerService
     {
-        public interface ICustomerService
-        {
-            Task<CustomerEntity> GetCustomerDetailsAsync(int customerId);
-            Task UpdateCustomerDetailsAsync(int customerId, CustomerEntity updatedCustomer);
-        }
+        Task<bool> TryAddOrderToCustomerAsync(string userSecret, string orderId);
+        Task<CustomerEntity> GetCustomerDetailsAsync(string customerId);
+        Task UpdateCustomerDetailsAsync(string customerId, string name, string contactInformation);
 
     }
 }

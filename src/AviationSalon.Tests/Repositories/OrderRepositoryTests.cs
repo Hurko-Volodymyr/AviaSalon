@@ -33,28 +33,28 @@ namespace AviationSalon.Tests.Repositories
 
             _customer = new CustomerEntity
             {
-                CustomerId = 1,
+                CustomerId = "1",
                 Name = "John Doe",
                 ContactInformation = "john@example.com",
             };
 
             _orderItem1 = new OrderItemEntity
             {
-                OrderItemId = 1,
-                AircraftId = 1,
+                OrderItemId = "1",
+                AircraftId = "1",
                 Quantity = 2,
             };
 
             _orderItem2 = new OrderItemEntity
             {
-                OrderItemId = 2,
-                AircraftId =2,
+                OrderItemId = "2",
+                AircraftId = "2",
                 Quantity = 1,
             };
 
             _existingOrder = new OrderEntity
             {
-                OrderId = 1,
+                OrderId = "1",
                 OrderDate = DateTime.Now,
                 CustomerId = _customer.CustomerId,
                 Customer = _customer,
@@ -63,7 +63,7 @@ namespace AviationSalon.Tests.Repositories
                 Status = OrderStatus.Pending,
             };
 
-            _nonExistingOrder = new OrderEntity { OrderId = -12341 };
+            _nonExistingOrder = new OrderEntity { OrderId = "-907b7" };
         }
 
         public void Dispose()
@@ -104,7 +104,7 @@ namespace AviationSalon.Tests.Repositories
             // Arrange
             await _dbContext.Orders.AddAsync(_existingOrder);
             await _dbContext.SaveChangesAsync();
-            _existingOrder.CustomerId = 10;
+            _existingOrder.CustomerId = "10";
 
             // Act
             await _orderRepository.UpdateAsync(_existingOrder);
@@ -134,35 +134,46 @@ namespace AviationSalon.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnNullForNonExistingOrder()
         {
             // Act
-            var result = await _orderRepository.GetByIdAsync(123);
+            var result = await _orderRepository.GetByIdAsync(_nonExistingOrder.OrderId);
 
             // Assert
             result.Should().BeNull();
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingOrder(int nonExistingOrderId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingOrder()
         {
-            // Arrange
-            _nonExistingOrder.OrderId = nonExistingOrderId;
-
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _orderRepository.UpdateAsync(_nonExistingOrder));
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingOrder(int nonExistingOrderId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForOrderWithNullId()
         {
             // Arrange
-            _nonExistingOrder.OrderId = nonExistingOrderId;
+            _nonExistingOrder.OrderId = null;
 
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _orderRepository.UpdateAsync(_nonExistingOrder));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingOrder()
+        {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _orderRepository.DeleteAsync(_nonExistingOrder));
         }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForOrderWithNullId()
+        {
+            // Arrange
+            _nonExistingOrder.OrderId = null;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _orderRepository.DeleteAsync(_nonExistingOrder));
+        }
+
     }
 
 }

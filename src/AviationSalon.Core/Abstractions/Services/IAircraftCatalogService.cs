@@ -5,9 +5,9 @@ namespace AviationSalon.Core.Abstractions.Services
     public interface IAircraftCatalogService
     {
         Task<List<AircraftEntity>> GetAircraftListAsync();
-        Task<AircraftEntity> GetAircraftDetailsAsync(int aircraftId);
-        Task EquipAircraftWithWeaponAsync(int aircraftId, int weaponId);
-        Task ClearLoadedWeaponsAsync(int aircraftId);
+        Task<AircraftEntity> GetAircraftDetailsAsync(string aircraftId);
+        Task EquipAircraftWithWeaponAsync(string aircraftId, string weaponId);
+        Task ClearLoadedWeaponsAsync(string aircraftId);
     }
 
 

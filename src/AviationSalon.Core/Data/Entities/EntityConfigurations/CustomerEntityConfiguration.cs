@@ -9,6 +9,7 @@ namespace AviationSalon.Core.Data.Entities.EntityConfigurations
         {
             builder.HasKey(c => c.CustomerId);
 
+            builder.Property(c => c.CustomerId).IsRequired().HasMaxLength(255);
             builder.Property(c => c.Name).IsRequired().HasMaxLength(255);
             builder.Property(c => c.ContactInformation).IsRequired().HasMaxLength(255);
 
@@ -17,4 +18,5 @@ namespace AviationSalon.Core.Data.Entities.EntityConfigurations
                 .HasForeignKey(o => o.CustomerId);
         }
     }
+
 }

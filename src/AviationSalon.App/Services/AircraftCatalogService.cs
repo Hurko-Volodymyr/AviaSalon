@@ -25,9 +25,15 @@ namespace AviationSalon.App.Services
         {
             try
             {
-                _logger.LogInformation("Getting the list of aircraft.");
                 var aircraftEntities = await _aircraftRepository.GetAllAsync();
-                return aircraftEntities.ToList();
+
+                aircraftEntities = aircraftEntities
+                    .OrderBy(a => a.Model)
+                    .ThenBy(a => a.Role)
+                    .ToList();
+
+                _logger.LogInformation($"Getting the sorted list of aircrafts with count: {aircraftEntities.Count()}.");
+                return aircraftEntities;
             }
             catch (Exception ex)
             {
@@ -36,7 +42,8 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<AircraftEntity> GetAircraftDetailsAsync(int aircraftId)
+
+        public async Task<AircraftEntity> GetAircraftDetailsAsync(string aircraftId)
         {
             try
             {
@@ -52,7 +59,7 @@ namespace AviationSalon.App.Services
         }
 
 
-        public async Task EquipAircraftWithWeaponAsync(int aircraftId, int weaponId)
+        public async Task EquipAircraftWithWeaponAsync(string aircraftId, string weaponId)
         {
             try
             {
@@ -75,6 +82,8 @@ namespace AviationSalon.App.Services
 
                 aircraft.Weapons.Add(weapon);
                 await _aircraftRepository.UpdateAsync(aircraft);
+
+                _logger.LogInformation($"Aircraft now has {aircraft.Weapons.Count} weapons.");
             }
             catch (Exception ex)
             {
@@ -84,7 +93,8 @@ namespace AviationSalon.App.Services
         }
 
 
-        public async Task ClearLoadedWeaponsAsync(int aircraftId)
+
+        public async Task ClearLoadedWeaponsAsync(string aircraftId)
         {
             try
             {

@@ -1,0 +1,69 @@
+﻿@model Tuple<List<AircraftEntity>, List<WeaponEntity>>
+
+@if (Model != null)
+{
+    <div class="container text-center">
+        <h1 class="display-4">Mission Cart</h1>
+
+        <h2 class="mt-4">Selected Aircraft</h2>
+        @foreach (var aircraft in Model.Item1)
+        {
+            <div>
+                <p>Model: @aircraft.Model</p>
+            </div>
+            <hr />
+        }
+
+        <h2 class="mt-4">Selected Weapons</h2>
+        @foreach (var weapon in Model.Item2)
+        {
+            <div>
+                <p>Name: @weapon.Name</p>
+            </div>
+            <hr />
+        }
+
+        <div class="mt-3">
+            <button class="btn btn-primary" id="backButton">Back to Mission Cart</button>
+            <button class="btn btn-success" id="submitOrderButton">Submit Order</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log('Document ready');
+
+            $('#backButton').click(function () {
+                console.log('Back button clicked');
+                window.location.href = '/home/cart';
+            });
+
+            $('#submitOrderButton').click(function () {
+                console.log('Submit order button clicked');
+
+                var aircraftList = @Html.Raw(Json.Serialize(Model.Item1.Select(a => a.AircraftId.ToString())));
+                var weaponList = @Html.Raw(Json.Serialize(Model.Item2.Select(w => w.WeaponId.ToString())));
+
+                $.ajax({
+                    url: '/mission/submitorder',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ aircraftList: aircraftList, weaponList: weaponList }),
+                    success: function (data) {
+                        console.log('Order submitted successfully');
+                        window.location.href = '/mission/orderconfirmation';
+                    },
+                    error: function (error) {
+                        console.log('Submit order error', error);
+                        alert('Error occurred while submitting the order.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+else
+{
+    <p>No items in the mission cart</p>
+}

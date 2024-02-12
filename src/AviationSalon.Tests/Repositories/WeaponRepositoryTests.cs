@@ -27,8 +27,8 @@ namespace AviationSalon.Tests.Repositories
 
             _weaponRepository = new WeaponRepository(_dbContext);
 
-            _existingWeapon = new WeaponEntity { Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
-            _nonExistingWeapon = new WeaponEntity { WeaponId = 123, Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+            _existingWeapon = new WeaponEntity { WeaponId = "123", Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
+            _nonExistingWeapon = new WeaponEntity { WeaponId = "-9=80123", Name = "NonExistingWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
         }
 
         public void Dispose()
@@ -99,34 +99,45 @@ namespace AviationSalon.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnNullForNonExistingWeapon()
         {
             // Act
-            var result = await _weaponRepository.GetByIdAsync(123);
+            var result = await _weaponRepository.GetByIdAsync(_nonExistingWeapon.WeaponId);
 
             // Assert
             result.Should().BeNull();
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingWeapon(int nonExistingWeaponId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNonExistingWeapon()
         {
-            // Arrange
-            _nonExistingWeapon.WeaponId = nonExistingWeaponId;
-
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _weaponRepository.UpdateAsync(_nonExistingWeapon));
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(456)]
-        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingWeapon(int nonExistingWeaponId)
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForWeaponWithNullId()
         {
             // Arrange
-            _nonExistingWeapon.WeaponId = nonExistingWeaponId;
+            _nonExistingWeapon.WeaponId = null;
 
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _weaponRepository.UpdateAsync(_nonExistingWeapon));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNonExistingWeapon()
+        {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _weaponRepository.DeleteAsync(_nonExistingWeapon));
         }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForWeaponWithNullId()
+        {
+            // Arrange
+            _nonExistingWeapon.WeaponId = null;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _weaponRepository.DeleteAsync(_nonExistingWeapon));
+        }
+
     }
 }

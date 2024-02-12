@@ -1,0 +1,52 @@
+﻿@section scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+}
+
+@if (Model != null)
+{
+    <div class="container text-center">
+        <img src="~/images/@Model.ImageFileName" class="img-fluid" alt="Aircraft Image">
+        <h1 class="display-4">@Model.Model</h1>
+        <p>@Localizer["Role"]: @Model.Role.ToString()</p>
+        <p>@Localizer["Max Weapons Capacity"]: @Model.MaxWeaponsCapacity</p>
+        <p>@Localizer["Range"]: @Model.Range @Localizer["meters"]</p>
+        <p>@Localizer["Max Height"]: @Model.MaxHeight @Localizer["meters"]</p>
+
+        <button class="btn btn-primary mx-auto" id="backButton">@Localizer["Back to Aircraft List"]</button>
+        <button class="btn btn-success mx-auto" id="equipButton">@Localizer["Equip Aircraft"]</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            console.log('Document ready');
+
+            var aircraftId = '@Model.AircraftId'; 
+            $('#backButton').click(function () {
+                console.log('Back button clicked');
+                window.location.href = '/';
+            });
+
+            $('#equipButton').click(function () {
+                console.log('Equip button clicked');
+
+                $.ajax({
+                    url: '/toequip/' + aircraftId,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Equip success');
+                        window.location.href = '/toequip/' + aircraftId;
+                    },
+                    error: function (error) {
+                        console.log('Equip error', error);
+                    }
+                });
+            });
+        });
+    </script>
+}
+else
+{
+    <p>@Localizer["Aircraft not found"]</p>
+}

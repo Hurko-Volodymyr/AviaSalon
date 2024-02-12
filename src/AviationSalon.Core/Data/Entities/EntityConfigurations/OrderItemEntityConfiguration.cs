@@ -9,6 +9,7 @@ namespace AviationSalon.Core.Data.Entities.EntityConfigurations
         {
             builder.HasKey(oi => oi.OrderItemId);
 
+            builder.Property(c => c.OrderItemId).IsRequired().HasMaxLength(255);
             builder.Property(oi => oi.Quantity).IsRequired();
 
             builder.HasOne(oi => oi.Order)

@@ -13,12 +13,18 @@ namespace AviationSalon.Tests.Services
         private readonly Mock<IRepository<WeaponEntity>> _weaponRepositoryMock;
         private readonly Mock<ILogger<WeaponService>> _loggerMock;
         private readonly WeaponService _weaponService;
+        private readonly WeaponEntity _weapon;
+        private readonly WeaponEntity _anotherWeapon;
+        private readonly WeaponEntity _nonExistingWeapon;
 
         public WeaponServiceTests()
         {
             _weaponRepositoryMock = new Mock<IRepository<WeaponEntity>>();
             _loggerMock = new Mock<ILogger<WeaponService>>();
             _weaponService = new WeaponService(_weaponRepositoryMock.Object, _loggerMock.Object);
+            _weapon = new WeaponEntity { WeaponId = "1", Name = "Weapon1", Type = WeaponType.AirToAir, FirePower = 100 };
+            _anotherWeapon = new WeaponEntity { WeaponId = "2", Name = "Weapon2", Type = WeaponType.AirToGround, FirePower = 150 };
+            _nonExistingWeapon = new WeaponEntity { WeaponId = null };
         }
 
         public void Dispose()
@@ -32,10 +38,10 @@ namespace AviationSalon.Tests.Services
         {
             // Arrange
             _weaponRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(new List<WeaponEntity>
-        {
-            new WeaponEntity { WeaponId = 1, Name = "Weapon1", Type = WeaponType.AirToAir, FirePower = 100 },
-            new WeaponEntity { WeaponId = 2, Name = "Weapon2", Type = WeaponType.AirToGround, FirePower = 150 }
-        });
+            {
+                _weapon,
+                _anotherWeapon,
+            });
 
             // Act
             var result = await _weaponService.GetWeaponsListAsync();
@@ -51,12 +57,11 @@ namespace AviationSalon.Tests.Services
         public async Task GetWeaponDetailsAsync_ShouldReturnWeaponDetails()
         {
             // Arrange
-            var weaponId = 1;
-            var expectedWeapon = new WeaponEntity { WeaponId = weaponId, Name = "TestWeapon", Type = WeaponType.AirToAir, FirePower = 100 };
-            _weaponRepositoryMock.Setup(repo => repo.GetByIdAsync(weaponId)).ReturnsAsync(expectedWeapon);
+            var expectedWeapon = _weapon;
+            _weaponRepositoryMock.Setup(repo => repo.GetByIdAsync(_weapon.WeaponId)).ReturnsAsync(expectedWeapon);
 
             // Act
-            var result = await _weaponService.GetWeaponDetailsAsync(weaponId);
+            var result = await _weaponService.GetWeaponDetailsAsync(_weapon.WeaponId);
 
             // Assert
             result.Should().NotBeNull();
@@ -77,18 +82,13 @@ namespace AviationSalon.Tests.Services
         public async Task GetWeaponDetailsAsync_ShouldThrowExceptionOnRepositoryFailure()
         {
             // Arrange
-            var weaponId = 1;
             var expectedExceptionMessage = "Repository error";
 
-            _weaponRepositoryMock.Setup(repo => repo.GetByIdAsync(weaponId)).ThrowsAsync(new Exception(expectedExceptionMessage));
+            _weaponRepositoryMock.Setup(repo => repo.GetByIdAsync(_weapon.WeaponId)).ThrowsAsync(new Exception(expectedExceptionMessage));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _weaponService.GetWeaponDetailsAsync(weaponId));
+            await Assert.ThrowsAsync<Exception>(() => _weaponService.GetWeaponDetailsAsync(_weapon.WeaponId));
 
         }
-
-
-
     }
-
 }

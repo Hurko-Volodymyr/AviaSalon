@@ -1,13 +1,14 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Aviation Shop</title>
+    <title>@Localizer["Aviation Salon"]</title>
+    <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
-    <!-- Add other styles and scripts here -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
     <style>
         body {
             display: flex;
@@ -19,21 +20,58 @@
         main {
             flex: 1;
         }
+
+        .footer {
+            padding: 20px 0;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+        }
+
+            .footer a {
+                color: #fff;
+            }
+
+        .login-button {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .login-button:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">Aviation Shop</a>
+            <a class="navbar-brand" href="/">Aviation Salon</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <!-- Navigation items, e.g., -->
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Mission"
+                           asp-action="OrderHistory" asp-route-customerId="@User.Identity.Name">
+                            @Localizer["Order History"]
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           @System.Globalization.CultureInfo.CurrentCulture.DisplayName
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <a class="dropdown-item" href="#" data-lang="uk-UA">@Localizer["Ukrainian"]</a>
+                            <a class="dropdown-item" href="#" data-lang="en-GB">@Localizer["English"]</a>
+                        </div>
+                    </li>
+                    <partial name="_LoginPartial" />
                 </ul>
             </div>
         </nav>
@@ -43,18 +81,40 @@
         @RenderBody()
     </main>
 
-    <footer class="footer mt-auto py-3 bg-dark text-white">
+    <footer class="border-top footer">
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <!-- Footer content, e.g., -->
-                    <p>&copy; 2023 Aviation Shop</p>
-                </div>
-            </div>
+            &copy; 2024 - Aviation Salon - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
         </div>
-    </footer>
+    </footer> 
 
-    <!-- Bootstrap and other scripts -->
-    <!-- Your existing script references here -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="~/js/site.js"></script>
+    <script>
+        function changeLanguage(culture) {
+            $.ajax({
+                url: 'changelanguage?culture=' + culture,
+                type: 'POST',
+                success: function () {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.error('Error during language change:', error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('[data-lang]').on('click', function () {
+                var selectedLang = $(this).data('lang');
+                changeLanguage(selectedLang);
+            });
+            var currentLang = $('html').attr('lang');
+            $('#languageDropdown').text(currentLang);
+        });
+
+    </script>
+
+    @RenderSection("scripts", required: false)
 </body>
-</html>

@@ -1,0 +1,27 @@
+﻿@model List<OrderEntity>
+
+<h1 class="text-center">@Localizer["OrderHistory"]</h1>
+
+<div class="row justify-content-center">
+    @foreach (var order in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Localizer["OrderId"]: @order.OrderId</h5>
+                    <p class="card-text">@Localizer["OrderDate"]: @order.OrderDate</p>
+                    <button type="button" class="btn btn-primary" onclick="viewOrderDetails('@order.OrderId', '@order.CustomerId')">@Localizer["ViewOrderDetails"]</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section scripts {
+    <script>
+        function viewOrderDetails(orderId, customerId) {
+            window.location.href = '/Mission/orderhistorydetails?orderId=' + orderId + '&customerId=' + customerId;
+        }
+    </script>
+}

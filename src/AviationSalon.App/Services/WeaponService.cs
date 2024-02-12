@@ -20,8 +20,9 @@ namespace AviationSalon.App.Services
         {
             try
             {
-                _logger.LogInformation("Getting the list of weapons.");
-                return await _weaponRepository.GetAllAsync();
+                var weapons = await _weaponRepository.GetAllAsync();
+                _logger.LogInformation($"Getting the list of weapons with count: {weapons.Count()}.");
+                return weapons;
             }
             catch (Exception ex)
             {
@@ -30,7 +31,7 @@ namespace AviationSalon.App.Services
             }
         }
 
-        public async Task<WeaponEntity> GetWeaponDetailsAsync(int weaponId)
+        public async Task<WeaponEntity> GetWeaponDetailsAsync(string weaponId)
         {
             try
             {
@@ -42,6 +43,6 @@ namespace AviationSalon.App.Services
                 _logger.LogError($"Error getting details for weapon. Details: {ex.Message}");
                 throw;
             }
-        }       
+        }
     }
 }

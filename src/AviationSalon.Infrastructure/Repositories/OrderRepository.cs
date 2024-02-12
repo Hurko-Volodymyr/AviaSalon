@@ -29,10 +29,13 @@ namespace AviationSalon.Infrastructure.Repositories
             return await _dbContext.Orders.ToListAsync();
         }
 
-        public async Task<OrderEntity> GetByIdAsync(int id)
+        public async Task<OrderEntity> GetByIdAsync(string id)
         {
-            return await _dbContext.Orders.FindAsync(id); 
+            return await _dbContext.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
         }
+
 
         public async Task UpdateAsync(OrderEntity entity)
         {

@@ -29,17 +29,18 @@ namespace AviationSalon.Tests.Repositories
 
         private AircraftEntity _aircraft { get; set; } = new AircraftEntity
         {
+            AircraftId = "1",
             Model = "TestModel",
-            Manufacturer = "TestManufacturer",
-            YearOfManufacture = 2022
+            Role = Core.Data.Enums.Role.Fighter,
+            Range = 10,
+            MaxHeight = 100,
+            MaxWeaponsCapacity = 2,
         };
 
         private AircraftEntity _nonExistingAircraft { get; set; } = new AircraftEntity
         {
-            AircraftId = 123,
+            AircraftId = "-1222",
             Model = "NonExistingAircraft",
-            Manufacturer = "TestManufacturer",
-            YearOfManufacture = 2022
         };
 
         [Fact]
@@ -105,10 +106,20 @@ namespace AviationSalon.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnNullForNonExistingAircraft()
         {
             // Act
-            var result = await _aircraftRepository.GetByIdAsync(123);
+            var result = await _aircraftRepository.GetByIdAsync(_nonExistingAircraft.AircraftId);
 
             // Assert
             result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldThrowExceptionForNullAircraftId()
+        {
+            // Arrange
+            var aircraftWithNullId = new AircraftEntity { AircraftId = null };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _aircraftRepository.UpdateAsync(aircraftWithNullId));
         }
 
         [Fact]
@@ -119,11 +130,22 @@ namespace AviationSalon.Tests.Repositories
         }
 
         [Fact]
+        public async Task DeleteAsync_ShouldThrowExceptionForNullAircraftId()
+        {
+            // Arrange
+            var aircraftWithNullId = new AircraftEntity { AircraftId = null };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _aircraftRepository.DeleteAsync(aircraftWithNullId));
+        }
+
+        [Fact]
         public async Task DeleteAsync_ShouldThrowExceptionForNonExistingAircraft()
         {
             // Act & Assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => _aircraftRepository.DeleteAsync(_nonExistingAircraft));
         }
+
     }
 
 }

@@ -1,28 +1,73 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+
+    @model List<AircraftEntity>
+    var aircraftList = ViewData["AircraftList"] as List<AircraftEntity>;
 }
 
-<div class="container">
-    <h1 class="display-4 text-center">Welcome to Aviation Shop</h1>
-    <p class="text-center">Explore our collection of aviation products.</p>
 
-    @for (int i = 0; i < 2; i++) 
-    {
-        <div class="row mb-4">
-            @for (int j = 0; j < 4; j++)
-            {
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Title</h5>
-                            <p class="card-text">Product Description</p>
-                            <p class="card-text">Product Price</p>
-                            <a href="#" class="btn btn-primary">View Details</a>
-                        </div>
+<div class="container">
+    <h1 class="display-4 text-center">@Localizer["WelcomeMessage"]</h1>
+    <p class="text-center">@Localizer["ExploreMessage"]</p>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="text-center">@Localizer["SelectAircraft"]</h2>
+        </div>
+        @foreach (var aircraft in aircraftList)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="~/images/@aircraft.ImageFileName" class="card-img-top" alt="Aircraft Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@aircraft.Model</h5>
+                        <p class="card-text">@Localizer["Role"]: @aircraft.Role</p>
+                        <p class="card-text">@Localizer["MaxWeaponsCapacity"]: @aircraft.MaxWeaponsCapacity</p>
+
+                        <button class="btn btn-primary view-details-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["ViewDetails"]</button>
+                        <button class="btn btn-success equip-aircraft-btn" data-id="@aircraft.AircraftId.ToString()">@Localizer["EquipAircraft"]</button>
                     </div>
                 </div>
-            }
-        </div>
-    }
+            </div>
+        }
+    </div>
 </div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.view-details-btn').on('click', function () {
+                var aircraftId = $(this).data('id');
+                var url = '/aircraftdetails/' + aircraftId;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        window.location.href = url;
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            $('.equip-aircraft-btn').click(function () {
+                var aircraftId = $(this).data('id');
+                console.log('Equip button clicked for aircraft ID: ' + aircraftId);
+
+                $.ajax({
+                    url: '/toequip/' + aircraftId,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Equip success');
+                        window.location.href = '/toequip/' + aircraftId;
+                    },
+                    error: function (error) {
+                        console.log('Equip error', error);
+                    }
+                });
+            });
+        });
+    </script>
+}

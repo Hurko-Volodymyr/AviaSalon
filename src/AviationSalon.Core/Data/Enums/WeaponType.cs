@@ -4,5 +4,6 @@
     {
         AirToAir,
         AirToGround,
+        AntiRadiation
     }
 }
